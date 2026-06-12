@@ -107,6 +107,8 @@ border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14px}
 .cl li{padding:8px 4px 8px 34px;position:relative;cursor:pointer;border-bottom:1px solid var(--line);font-size:14px}
 .cl li::before{content:'○';position:absolute;left:8px;color:var(--blue)}
 .cl li.done{opacity:.45;text-decoration:line-through}
+.cl li.hdr{font-weight:800;font-size:11.5px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:default;padding-left:4px;margin-top:10px;border-bottom:none}
+.cl li.hdr::before{content:""}
 .cl li.done::before{content:'✓';color:var(--green);font-weight:800}
 h2.vt{font-size:19px;color:var(--navy);margin:8px 2px 12px}
 .lead{font-size:13.5px;color:var(--muted);margin:-6px 2px 12px}
@@ -275,7 +277,7 @@ photos:[IMG.borgund],
 nav:[{t:"Stegastein",u:gs("Stegastein viewpoint")},{t:"Borgund stavkirke",u:gs("Borgund Stave Church")}]},
 
 {n:16,iso:"2026-07-18",d:"so 18.7.",st:3,title:"Sognefjord → Jostedalen, kanoe",drive:"80 km + ⛴ 15 min",img:IMG.urnes,
-plan:["Trajekt Mannheller–Fodnes (15 min, bez rezervácie — ferjekonto zľava)","Solvorn → trajektík (bez auta) do Urnes — najstarší stave church, UNESCO","Cestou hore dolinou: Breheimsenteret (centrum ľadovca)","Popoludní kanoe/kajak, kúpanie"],
+plan:["Trajekt Mannheller–Fodnes (15 min, bez rezervácie — ferjekonto zľava)","Solvorn → trajektík (bez auta) do Urnes — najstarší stave church, UNESCO","Cestou hore dolinou: Breheimsenteret (centrum ľadovca)","Popoludní kanoe/kajak, kúpanie","Večer voliteľne: akvapark v Gaupne — tobogán a SAUNY 🧖"],
 sleep:"Divoko v doline Jostedalen popri rieke (P4N), 2 noci — prespite čo najvyššie, ráno ste pri ľadovci za 10 min",wild:1,
 nav:[{t:"Solvorn (trajektík Urnes)",u:gs("Solvorn ferry Urnes")},{t:"→ Jostedalen",u:"https://www.google.com/maps/dir/Gaupne/Breheimsenteret"}]},
 
@@ -333,7 +335,7 @@ sleep:"⛺ KEMP #3 + posledné pranie: Hunderfossen camping",wild:0,
 nav:[{t:"Viewpoint Snøhetta",u:gs("Viewpoint Snøhetta Tverrfjellhytta")},{t:"→ Lillehammer",u:"https://www.google.com/maps/dir/Trondheim/Lillehammer"}]},
 
 {n:26,iso:"2026-07-28",d:"ut 28.7.",st:6,title:"🎿 Lillehammer → Oslo",drive:"185 km · 2,5 h",img:IMG.lillehammer,
-plan:["Olympijský park ZOH 1994: skokanské mostíky Lysgårdsbakkene (sedačka hore)","Zjazd bobom na kolieskach — pre Lea povinnosť","Alternatíva: pol dňa Hunderfossen park (trolí svet)","Popoludní → Oslo (mýtny okruh ide cez Epass24 sám)"],
+plan:["Olympijský park ZOH 1994: skokanské mostíky Lysgårdsbakkene (sedačka hore)","Zjazd bobom na kolieskach — pre Lea povinnosť","Alternatíva: pol dňa Hunderfossen park (trolí svet)","Popoludní → Oslo (mýtny okruh ide cez Epass24 sám)","Večer tip: plávajúca SAUNA vo fjorde pri Opere (KOK / Oslo Badstuforening, ~300 NOK/os, rezervovať online) — zo sauny skok rovno do mora 🧖"],
 sleep:"Sjølyst Marina bobilparkering (5 km od centra, MHD) / Bogstad camping",wild:0,
 nav:[{t:"Olympijský park",u:gs("Lysgårdsbakkene Lillehammer")},{t:"→ Oslo",u:"https://www.google.com/maps/dir/Lillehammer/Oslo"}]},
 
@@ -374,7 +376,7 @@ const CONTACTS=[
 ["🚑 Záchranka Nórsko","113","tel:113"],
 ["🚒 Hasiči Nórsko","110","tel:110"],
 ["🩺 Lekár (nie tieseň), NO","116 117","tel:116117"],
-["🚐 Požičovňa — Darina, Karavany Bardejov","+421 911 825 252","tel:+421911825252"],
+["🚐 Požičovňa — Slavomír Hajdu, Karavany Bardejov","+421 911 825 252","tel:+421911825252"],
 ["⛴ Color Line","+47 22 94 42 00","tel:+4722944200"],
 ["🛶 Voss Active","+47 56 51 05 25","tel:+4756510525"],
 ["🧊 Jostedalen Breførarlag (ľadovec)","+47 57 68 31 11","tel:+4757683111"],
@@ -531,10 +533,45 @@ function renderPlanB(){
 }
 
 /* ============ RENDER: INFO ============ */
-const PACKLIST=["Pasy/občianky všetci + vodičák","EHIC kartičky + Revolut karta","Lístky offline v mobile + vytlačená sada","Pevná turistická obuv ×3","Vrstvy: vetrovky, čiapky, rukavice (ľadovec!)","Plavky, uteráky, rýchloschnúce","Pršiplášte / goretex","Bicykle + prilby + zámok","Rybársky prút + blyskáče (more zadarmo)","Gril + uhlie/plyn","Predlžovačka + CEE redukcia, vodná hadica","Powerbanky, slúchadlá (audio guide), spacie masky","Repelent, opaľovací krém, lekárnička","Desiatové boxy, termosky","Jedlo: trvanlivé + mäso vákuovo (max 10 kg/os!)","Alkohol v limite: 1 l + 1,5 l vína + 2 l piva /os","Zmluva o prenájme + tel. na Darinu"];
+const PACKLIST=[
+"## 💊 Lekárnička",
+"Marek: lieky na riedenie krvi — zásoba na 35 dní, originál balenia + kópia receptu/lekárskej správy",
+"Denisa: lieky na migrénu (triptány — vyzdvihnúť predpis včas!) + overená kombinácia",
+"Ibuprofen + paracetamol, čierne uhlie/loperamid + rehydratačné vrecká",
+"Kinedryl/Aviomarin — na trajekty (4 plavby!)",
+"Compeed na pľuzgiere + náplasti + elastický obväz (túry!)",
+"Dezinfekcia, antihistaminikum, pinzeta na kliešte, teplomer",
+"Repelent (komáre pri jazerách) + opaľovací krém — hory a voda páli",
+"EHIC kartičky ×3 + potvrdenie Revolut poistenia",
+"## 👕 Oblečenie — vrstvy! (8–20 °C, dážď hocikedy, nie je to Chorvátsko)",
+"Funkčné/merino tričká (rýchlo schnú) — 4–5 ks/os",
+"Fleece alebo mikina pre každého + 1 teplá rezerva",
+"Nepremokavá bunda s membránou + nepremokavé nohavice",
+"Čiapka + rukavice + buff pre každého (ľadovec, Galdhøpiggen, Dalsnibba = 0–5 °C)",
+"Turistické nohavice + šortky + plavky + rýchloschnúce uteráky",
+"ROZCHODENÉ turistické topánky ×3 + tenisky + crocsy/sandále do kempu",
+"Turistické ponožky viac párov + teplé pyžamo (noci 5–10 °C)",
+"## 🎒 Výbava",
+"Pasy/občianky + vodičák + zmluva o prenájme + EÚ záznam o nehode",
+"Lístky offline v mobile + vytlačená sada",
+"2. plynová fľaša od p. Hajdua! (chladnička pri státí bez elektriny žerie plyn 24/7)",
+"Gril + kartuše/uhlie (nech neťahá z fľaše) + zapaľovač",
+"Bicykle + prilby + zámok · kolobežka pre Lea (ak je miesto)",
+"Paddleboard + pumpa + vesty (fjordy ~17 °C)",
+"Rybársky prívlačový set + pilkery/blyskáče 20–40 g (kúpiť doma — v NO draho)",
+"Predlžovačka + CEE redukcia + vodná hadica (overiť, čo je v karavane)",
+"Powerbanky, slúchadlá (audio guide Geiranger), spacie masky (svetlé noci!)",
+"Čelovky, desiatové boxy, termosky, vrecia na odpad",
+"Plavky aj do sauny + osušky (Gaupne akvapark, Oslo fjord sauna)",
+"## 🛒 Potraviny z domu (colné limity Nórska!)",
+"Trvanlivé: cestoviny, ryža, konzervy, káva, korenie, olej, sladkosti, müsli",
+"Mäso na gril + klobásy + syry VÁKUOVO — spolu max 10 kg/os",
+"Alkohol presne v limite: 1 l tvrdý + 1,5 l víno + 2 l pivo na dospelého",
+"Drogéria + tablety/chémia do WC kazety (overiť u p. Hajdua, čo dáva)"
+];
 function renderInfo(){
   let cts="";CONTACTS.forEach(c=>{cts+=`<div class="contact"><span>${c[0]}</span><a href="${c[2]}">${c[1]}</a></div>`;});
-  let pl="";PACKLIST.forEach((p,i)=>{pl+=`<li class="${pack[i]?"done":""}" onclick="togPack(${i},this)">${p}</li>`;});
+  let pl="";PACKLIST.forEach((p,i)=>{if(p.startsWith("## ")){pl+=`<li class="hdr">${p.slice(3)}</li>`;}else{pl+=`<li class="${pack[i]?"done":""}" onclick="togPack(${i},this)">${p}</li>`;}});
   document.getElementById("v-info").innerHTML=`
   <h2 class="vt">Dôležité info</h2>
 
