@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16324f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<title>Nórsko 2026</title>
+<style>
+:root{--navy:#16324f;--blue:#1d5d8f;--sky:#2e7da6;--ice:#eaf3f9;--red:#c8402f;--amber:#d97a1f;
+--green:#2e7d4f;--ink:#22303c;--muted:#5c6f80;--line:#d7e3ec;--bg:#f2f6f9;--card:#fff}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+font-family:-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.45;font-size:15.5px}
+body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+header.top{position:sticky;top:0;z-index:30;background:linear-gradient(120deg,#16324f,#1d5d8f);
+color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;justify-content:space-between;align-items:center}
+header.top h1{margin:0;font-size:18px;letter-spacing:2px}
+header.top .sub{font-size:11.5px;opacity:.85}
+.wrap{max-width:680px;margin:0 auto;padding:12px 12px 24px}
+.view{display:none}.view.active{display:block}
+/* bottom nav */
+nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
+display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs button{flex:1;background:none;border:none;padding:8px 0 6px;font-size:10.5px;color:var(--muted);cursor:pointer}
+nav.tabs button .ic{display:block;font-size:20px;margin-bottom:1px}
+nav.tabs button.on{color:var(--blue);font-weight:700}
+/* day list */
+.todaycard{border-radius:16px;overflow:hidden;position:relative;margin-bottom:14px;box-shadow:0 4px 14px rgba(22,50,79,.25);cursor:pointer}
+.todaycard img{width:100%;height:190px;object-fit:cover;display:block}
+.todaycard .ov{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(10,25,40,.85));
+display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff}
+.todaycard .badge{position:absolute;top:10px;left:10px;background:var(--red);color:#fff;font-weight:800;
+font-size:12px;padding:4px 12px;border-radius:999px;letter-spacing:1px}
+.todaycard h3{margin:0;font-size:19px}.todaycard .d{font-size:12.5px;opacity:.9}
+.stagehead{margin:18px 2px 8px;font-size:12px;font-weight:800;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase}
+.dayrow{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;
+margin-bottom:8px;overflow:hidden;cursor:pointer;align-items:stretch}
+.dayrow.past{opacity:.55}
+.dayrow .thumb{width:86px;min-height:76px;background:var(--ice) center/cover no-repeat;flex:none}
+.dayrow .tx{padding:9px 10px 9px 0;flex:1;min-width:0}
+.dayrow .dt{font-size:11.5px;color:var(--muted);font-weight:700}
+.dayrow .dt .tick{color:var(--green)}
+.dayrow h4{margin:1px 0 3px;font-size:14.5px;color:var(--navy)}
+.dayrow .meta{font-size:11.5px;color:var(--muted)}
+.dayrow .meta b{color:var(--red)}
+/* detail overlay */
+#detail{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
+#detail.open{display:block}
+.hero{position:relative}
+.hero img{width:100%;height:230px;object-fit:cover;display:block;background:var(--ice)}
+.hero .ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,25,40,.45),transparent 35%,rgba(10,25,40,.88));
+display:flex;flex-direction:column;justify-content:flex-end;padding:14px;color:#fff}
+.hero h2{margin:0;font-size:21px;line-height:1.2}
+.hero .d{font-size:13px;opacity:.95}
+.hero .back{position:absolute;top:calc(10px + env(safe-area-inset-top));left:10px;background:rgba(0,0,0,.45);
+color:#fff;border:none;border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer}
+.dbody{max-width:680px;margin:0 auto;padding:12px 14px 90px}
+.pill{display:inline-block;background:var(--navy);color:#fff;font-size:12px;border-radius:8px;padding:3px 10px;margin:2px 6px 8px 0}
+.pill.green{background:var(--green)}.pill.red{background:var(--red)}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.sec h5{margin:0 0 8px;font-size:12px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted)}
+.plan li{margin:0 0 2px;list-style:none;position:relative;padding:7px 4px 7px 34px;border-radius:8px;cursor:pointer}
+.plan{margin:0;padding:0}
+.plan li::before{content:'○';position:absolute;left:8px;top:6px;color:var(--blue);font-size:15px}
+.plan li.done{opacity:.45;text-decoration:line-through}
+.plan li.done::before{content:'✓';color:var(--green);font-weight:800}
+.box{border-left:4px solid;border-radius:0 10px 10px 0;padding:9px 12px;margin:10px 0;font-size:14px;background:#fff}
+.box.book{border-color:var(--green);background:#f0f7f1}
+.box.sleep{border-color:#7b6cb1;background:#f4f2fa}
+.box.tip{border-color:var(--amber);background:#fdf8ec}
+.box.late{border-color:var(--red);background:#fdf0ed}
+.navbtns a{display:block;background:var(--blue);color:#fff;text-decoration:none;text-align:center;
+border-radius:10px;padding:11px;margin:7px 0;font-weight:600;font-size:14.5px}
+.navbtns a.sec2{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.gallery{display:flex;gap:8px;overflow-x:auto;padding:2px 0;-webkit-overflow-scrolling:touch}
+.gallery img{height:130px;border-radius:10px;flex:none}
+.prevnext{display:flex;gap:10px;margin-top:14px}
+.prevnext button{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font-weight:700;font-size:14px;cursor:pointer}
+.prevnext button:disabled{opacity:.35}
+/* map */
+.mapbox{background:#dcebf5;border:1px solid var(--line);border-radius:14px;padding:6px}
+.mapbox svg{width:100%;height:auto;display:block}
+.mappin{cursor:pointer}
+/* tables/cards in info views */
+.tix{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.tix .when{font-size:12px;font-weight:800;color:var(--red)}
+.tix h4{margin:2px 0 4px;font-size:15.5px;color:var(--navy)}
+.tix .ref{font-size:12.5px;color:var(--muted)}
+.tix .note{font-size:13.5px;margin-top:6px}
+.infocard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 16px 12px;margin:10px 0}
+.infocard h3{font-size:15.5px;color:var(--navy);margin:12px 0 6px}
+.infocard ul{margin:4px 0;padding-left:18px;font-size:14px}
+.infocard li{margin:4px 0}
+.contact{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:9px 2px;font-size:14px}
+.contact:last-child{border-bottom:none}
+.contact a{color:var(--blue);text-decoration:none;font-weight:700;white-space:nowrap;margin-left:10px}
+.anchor{display:flex;gap:10px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--red);
+border-radius:10px;padding:10px 12px;margin:8px 0;font-size:14px}
+.anchor .ic{font-size:20px}
+.anchor b.t{color:var(--red)}
+.cl{list-style:none;margin:0;padding:0}
+.cl li{padding:8px 4px 8px 34px;position:relative;cursor:pointer;border-bottom:1px solid var(--line);font-size:14px}
+.cl li::before{content:'○';position:absolute;left:8px;color:var(--blue)}
+.cl li.done{opacity:.45;text-decoration:line-through}
+.cl li.done::before{content:'✓';color:var(--green);font-weight:800}
+h2.vt{font-size:19px;color:var(--navy);margin:8px 2px 12px}
+.lead{font-size:13.5px;color:var(--muted);margin:-6px 2px 12px}
+a{color:var(--blue)}
+.cnt{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;margin-bottom:14px}
+.cnt b{font-size:26px;color:var(--blue)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div><h1>NÓRSKO 2026</h1><div class="sub">3.–31. júl · Marek · Denisa · Leo · Bürstner PO282IN</div></div>
+  <div style="font-size:26px">🚐</div>
+</header>
+
+<div class="wrap">
+  <div id="v-days" class="view active"></div>
+  <div id="v-map" class="view"></div>
+  <div id="v-tix" class="view"></div>
+  <div id="v-planb" class="view"></div>
+  <div id="v-info" class="view"></div>
+</div>
+
+<div id="detail"></div>
+
+<nav class="tabs">
+  <button data-v="days" class="on"><span class="ic">📅</span>Dni</button>
+  <button data-v="map"><span class="ic">🗺️</span>Mapa</button>
+  <button data-v="tix"><span class="ic">🎫</span>Lístky</button>
+  <button data-v="planb"><span class="ic">🆘</span>Plán B</button>
+  <button data-v="info"><span class="ic">ℹ️</span>Info</button>
+</nav>
+
+<script>
+/* ============ IMAGES ============ */
+const IMG={
+legoland:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Vikings_River_Splash_%28Legoland_Billund%29_02.jpg/960px-Vikings_River_Splash_%28Legoland_Billund%29_02.jpg",
+rabjerg:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/R%C3%A5bjerg_mile.jpg/960px-R%C3%A5bjerg_mile.jpg",
+grenen:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Grenen%2C_Skagen%2C_Dinamarca%2C_2019-09-09%2C_DD_03.jpg/960px-Grenen%2C_Skagen%2C_Dinamarca%2C_2019-09-09%2C_DD_03.jpg",
+kjerag:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Kjerag_with_rainbow.jpg/960px-Kjerag_with_rainbow.jpg",
+preikestolen:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Preikestolen_Norge.jpg/960px-Preikestolen_Norge.jpg",
+lysefjord:"https://upload.wikimedia.org/wikipedia/commons/c/ca/Lysefjorden_fjord.jpg",
+latefossen:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/L%C3%A5tefossen_2024.jpg/960px-L%C3%A5tefossen_2024.jpg",
+voringsfossen:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/M%C3%A5b%C3%B8dalen%2C_2011_August.jpg/960px-M%C3%A5b%C3%B8dalen%2C_2011_August.jpg",
+bryggen:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Fassaden_in_Bryggen%2C_Bergen_N.jpg/960px-Fassaden_in_Bryggen%2C_Bergen_N.jpg",
+stegastein:"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Stegastein_viewpoint_-_panoramio_%281%29.jpg/960px-Stegastein_viewpoint_-_panoramio_%281%29.jpg",
+borgund:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/00_5847_Stabkirche_Borgund_-_L%C3%A6rdal.jpg/960px-00_5847_Stabkirche_Borgund_-_L%C3%A6rdal.jpg",
+nigardsbreen:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Nigardsbreen_lodowiec.jpg/960px-Nigardsbreen_lodowiec.jpg",
+sognefjellet:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Riksvei_55_i_Luster.jpg/960px-Riksvei_55_i_Luster.jpg",
+galdhopiggen:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/View_from_Galdh%C3%B8piggen_to_east.jpg/960px-View_from_Galdh%C3%B8piggen_to_east.jpg",
+geiranger:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Geirangerfjord_from_%C3%98rnesvingen%2C_2013_June.jpg/960px-Geirangerfjord_from_%C3%98rnesvingen%2C_2013_June.jpg",
+trollstigen:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/.00_7891_Trollstigen_-_Norway.jpg/960px-.00_7891_Trollstigen_-_Norway.jpg",
+atlanticroad:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Atlanterhavsveien%2C_Storseisundet_bru.jpg/960px-Atlanterhavsveien%2C_Storseisundet_bru.jpg",
+alesund:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Vista_de_%C3%85lesund_desde_Aksla%2C_Noruega%2C_2019-09-01%2C_DD_16.jpg/960px-Vista_de_%C3%85lesund_desde_Aksla%2C_Noruega%2C_2019-09-01%2C_DD_16.jpg",
+nidaros:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Nidaros_Cathedral_in_Trondheim_detail_8843.jpg/960px-Nidaros_Cathedral_in_Trondheim_detail_8843.jpg",
+oslo:"https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Oslo_Opera_House_2023_1.jpg/960px-Oslo_Opera_House_2023_1.jpg",
+sondervig:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/20100819_S%C3%B8ndervig_Beach_TrygFonden_Kystlivredning_Surf_Life_Saving_Denmark.JPG/960px-20100819_S%C3%B8ndervig_Beach_TrygFonden_Kystlivredning_Surf_Life_Saving_Denmark.JPG",
+lysevegen:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Lysefjorden_-_road_to_Lysebotn.JPG/960px-Lysefjorden_-_road_to_Lysebotn.JPG",
+kinsarvik:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Kinsarvik_-_no-nb_digifoto_20150217_00202_NB_MIT_FNR_16701.jpg/960px-Kinsarvik_-_no-nb_digifoto_20150217_00202_NB_MIT_FNR_16701.jpg",
+husedalen:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Nykkjes%C3%B8yfossen_no.jpg/960px-Nykkjes%C3%B8yfossen_no.jpg",
+voss:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Voss_Gondol_Passenger_lift_cableway_%28taubane%29_to_Hanguren_View_from_gondola_cabin_towards_Vossavangen_Vangsvatnet_November_afternoon_sunset_Snow_etc_Voss_Norway_2019-11-20_0583.jpg/960px-thumbnail.jpg",
+urnes:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Urnes_Stave_Church_from_north.jpg/960px-Urnes_Stave_Church_from_north.jpg",
+trollveggen:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Romsdalen_and_Trolltindene%2C_M%C3%B8re_og_Romsdal%2C_Norway_in_2013_June.jpg/960px-Romsdalen_and_Trolltindene%2C_M%C3%B8re_og_Romsdal%2C_Norway_in_2013_June.jpg",
+rampestreken:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Norvegia-_fiordo_di_Romsdals%2C_presso_%C3%85ndalsnes.jpg/960px-Norvegia-_fiordo_di_Romsdals%2C_presso_%C3%85ndalsnes.jpg",
+snohetta:"https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Viewpoint_Sn%C3%B8hetta%2C_mot_Sn%C3%B8hetta.jpg/960px-Viewpoint_Sn%C3%B8hetta%2C_mot_Sn%C3%B8hetta.jpg",
+lillehammer:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Lillehammer_Olympiapark_in_Spring_-_Lysg%C3%A5rdsbakkene_%28Ski_Jumping_Hill%29.jpg/960px-Lillehammer_Olympiapark_in_Spring_-_Lysg%C3%A5rdsbakkene_%28Ski_Jumping_Hill%29.jpg",
+vigeland:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Vigeland_Sculpture_Park_-_Panoramic_view_towards_the_Monolith%2C_Oslo%2C_Norway.jpg/960px-Vigeland_Sculpture_Park_-_Panoramic_view_towards_the_Monolith%2C_Oslo%2C_Norway.jpg",
+wroclaw:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/2016_Wroc%C5%82aw%2C_Rynek_49.jpg/960px-2016_Wroc%C5%82aw%2C_Rynek_49.jpg"
+};
+const gm=q=>"https://www.google.com/maps/dir/?api=1&destination="+encodeURIComponent(q);
+const gs=q=>"https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);
+
+/* ============ STAGES ============ */
+const STAGES=["Etapa 1 · Presun & Dánsko","Etapa 2 · Lysefjord","Etapa 3 · Hardanger & Bergen","Etapa 4 · Sognefjord & strecha Nórska","Etapa 5 · Geiranger & Romsdal","Etapa 6 · Atlantic Road & Trondheim","Etapa 7 · Oslo & návrat"];
+
+/* ============ DAYS ============ */
+const DAYS=[
+{n:1,iso:"2026-07-03",d:"pi 3.7.",st:0,title:"Prevzatie karavanu, nočný odjazd",drive:"~750 km · noc",img:null,
+plan:["8:00 prevzatie karavanu v Bardejove (plná nafta + AdBlue, nafotiť stav!)","Košice — balenie, bicykle na nosič","~17:00 odchod: Prešov → Krakov → Katovice → Vroclav → smer Berlín"],
+sleep:"~01:00 odpočívadlo na nemeckej diaľnici za PL hranicou",wild:1,
+tips:["Poľská A4: mýto ~10–15 €, platba kartou/appka Autopay","Šoférujte na striedačku, v noci sa ide najlepšie"],
+nav:[{t:"Navigovať: Košice → Berlín",u:"https://www.google.com/maps/dir/Košice/Wrocław/Berlin"}]},
+
+{n:2,iso:"2026-07-04",d:"so 4.7.",st:0,title:"Nemecko → Billund",drive:"~650 km · 7 h",img:IMG.legoland,
+plan:["Berlín → Hamburg → dánska hranica → Billund (príchod ~17:00)","Večer oddych, lístky do LEGOLAND appky"],
+sleep:"Billund autocamperplads / stellplatz pri Legolande (~15–20 €) — ráno ste pri bráne prví",wild:0,
+tips:["V Dánsku sa divoko v aute spať nesmie — ale stellplatzy sú lacné a všade"],
+nav:[{t:"Navigovať: Berlín → Billund",u:"https://www.google.com/maps/dir/Berlin/Billund"}]},
+
+{n:3,iso:"2026-07-05",d:"ne 5.7.",st:0,title:"🎢 LEGOLAND — celý deň",drive:"85 km večer",img:IMG.legoland,
+plan:["10:00 pri bráne — prvú 1,5 h veľké dráhy (Flying Eagle, Polar X-Plorer) bez čakania","Bronze Fastrack skipy minúť v špičke 12:00–16:30 (podľa appky)","Obed z karavanu na parkovisku (vstup platí celý deň, piknik v parku dovolený)","Po 17:00 park redne — opakovačky zadarmo","~18:30 odchod na pobrežie → Søndervig (1 h)"],
+book:"🎫 obj. 605090076 — 3× vstup + 2× Bronze Fastrack (Marek, Leo). V LEGOLAND appke.",
+sleep:"Autocamperplads Søndervig/Ringkøbing (~15 €)",wild:0,
+nav:[{t:"Navigovať: Legoland",u:gs("LEGOLAND Billund")},{t:"Večer: Billund → Søndervig",u:"https://www.google.com/maps/dir/Billund/Søndervig"}]},
+
+{n:4,iso:"2026-07-06",d:"po 6.7.",st:0,title:"🚴 Duny a pláže západného Dánska",drive:"~150 km podvečer",img:IMG.sondervig,
+plan:["Søndervig: festival pieskových sôch","Bicykle po dunách do Hvide Sande a späť (~25 km)","Kúpanie v Severnom mori, obed z grilu","Podvečer presun na sever — západ slnka pri majáku Bovbjerg"],
+sleep:"Stellplatz cestou na sever (Thy/Klitmøller — Park4Night)",wild:0,
+nav:[{t:"Cyklotrasa: Søndervig → Hvide Sande",u:"https://www.google.com/maps/dir/Søndervig/Hvide+Sande"},{t:"Maják Bovbjerg",u:gs("Bovbjerg Fyr")}]},
+
+{n:5,iso:"2026-07-07",d:"ut 7.7.",st:0,title:"Skagen — stret dvoch morí → ⛴ trajekt do Nórska",drive:"~310 km + ⛴ 3 h",img:IMG.grenen,
+plan:["Ráno presun na sever (~3 h)","Råbjerg Mile — putujúca duna (1,5 h)","Grenen — špica Dánska, pešo na bod, kde sa zlieva Severné a Baltské more","17:30 odchod do Hirtshals — CHECK-IN DO 19:45 (doklady všetci!)","20:45 Color Line SuperSpeed 1 → Kristiansand 23:59 — večerný bufet na palube zaplatený","Prednostné vylodenie → 30 min po E39 na západ"],
+book:"🎫 Color Line WKV6879 · check-in do 19:45 · bufet ×3 + prednostné vylodenie v cene",
+sleep:"Odpočívadlo na E39 západne od Kristiansandu — prvá noc v Nórsku",wild:1,
+late:"Ak meškáte: radšej škrtnúť Råbjerg/Grenen než riskovať check-in. Pri zmeškaní trajektu volať Color Line +47 22 94 42 00 — prebookovanie za poplatok.",
+photos:[IMG.rabjerg],
+nav:[{t:"Råbjerg Mile",u:gs("Råbjerg Mile parking")},{t:"Grenen",u:gs("Grenen Skagen")},{t:"Prístav Hirtshals",u:gs("Hirtshals ferry terminal Color Line")}]},
+
+{n:6,iso:"2026-07-08",d:"st 8.7.",st:1,title:"Cez hory do Lysebotn",drive:"210 km · 3,5 h",img:IMG.lysevegen,
+plan:["Pomalé ráno pri mori (po troch dňoch presunov)","Presun cez Sirdal na náhornú plošinu nad Lysebotn","Lysevegen — 27 serpentín, vyhliadky","Kúpanie v horských jazerách na plošine"],
+sleep:"Divoko na plošine pri Øygardstøl — polnočné svetlo, prvé veľké WOW",wild:1,
+nav:[{t:"Navigovať: Øygardstøl (Kjerag parking)",u:gs("Øygardstøl")}]},
+
+{n:7,iso:"2026-07-09",d:"št 9.7.",st:1,title:"🥾 KJERAG — balvan 1 000 m nad fjordom",drive:"0 km",img:IMG.kjerag,
+plan:["Štart z Øygardstøl do 9:00 (menej ľudí aj tepla)","10 km tam a späť, 5–6 h, tri stúpania s reťazami — pevná obuv","Foto na Kjeragboltene (dobrovoľné! krásne aj zboku)","Večer gril a výhľad na Lysefjord z plošiny"],
+sleep:"Plošina ako včera — alebo zísť serpentínami do Lysebotn (ráno trajekt!)",wild:1,
+tips:["Parkovné Øygardstøl ~300 NOK","Vietor a počasie: pri daždi sú skalné platne šmykľavé — v tom prípade radšej vymeniť za oddych a ísť na Kjerag nie"],
+nav:[{t:"Øygardstøl",u:gs("Øygardstøl")}]},
+
+{n:8,iso:"2026-07-10",d:"pi 10.7.",st:1,title:"⛴ Plavba Lysefjordom (karavan na palube)",drive:"40 km + ⛴ 2,5 h",img:IMG.lysefjord,
+plan:["Voľné dopoludnie v Lysebotn — kúpanie, káva, regenerácia","NA MÓLE NAJNESKÔR 12:35 (inak miesto prepadá!)","12:55–15:35 trajekt Lysebotn → Lauvvik — plavba popod Kjerag aj Preikestolen","Presun ku Preikestolen (40 min)","Podvečer kúpanie v jazere Revsvatnet"],
+book:"🎫 Kolumbus 5323509360 · na móle do 12:35 · lístok v mobile",
+sleep:"Parkovisko Preikestolen pri trailheade — obytky tam smú prespať (v cene parkovného)",wild:1,
+late:"Ak trajekt nestíhate: obchádzka autom cez Sinnes–Byrkjedal (~3,5 h navyše), strata len 819 NOK — svet sa nezrúti.",
+nav:[{t:"Mólo Lysebotn",u:gs("Lysebotn ferjekai")},{t:"Po vylodení: Lauvvik → Preikestolen parking",u:"https://www.google.com/maps/dir/Lauvvik/Preikestolen+parking"}]},
+
+{n:9,iso:"2026-07-11",d:"so 11.7.",st:1,title:"🥾 PREIKESTOLEN — Kazateľnica",drive:"110 km podvečer",img:IMG.preikestolen,
+plan:["Budík 5:45, na chodníku 6:30 — o 8:30 hore takmer sami","8 km tam a späť, ~4 h — plošina 604 m nad Lysefjordom","Popoludní spánok/kúpanie","Podvečer Rv13 na sever, trajekt Hjelmeland–Nesvik (10 min, bez rezervácie)"],
+sleep:"Divoko pri jazere Suldalsvatnet (odpočívadlá popri Rv13)",wild:1,
+tips:["Cez deň je na Preikestolene sprievod ľudí — preto tak skoro"],
+nav:[{t:"Trasa: Preikestolen → Suldal",u:"https://www.google.com/maps/dir/Preikestolen+parking/Suldalsosen"}]},
+
+{n:10,iso:"2026-07-12",d:"ne 12.7.",st:2,title:"Rv13 → Låtefossen → Kinsarvik",drive:"170 km · 3,5 h",img:IMG.latefossen,
+plan:["Ryfylke scenic route: Suldal, Røldal","Låtefossen — dvojitý vodopád priamo pri ceste (foto)","Cez Odda do Kinsarviku","Kúpanie vo fjorde, jablkové sady, cider z Hardangeru"],
+sleep:"⛺ KEMP #1: Kinsarvik, 2 noci — práčka, sprchy, voda (zadný kemp lacnejší)",wild:0,
+photos:[IMG.kinsarvik],
+nav:[{t:"Navigovať: cez Låtefossen do Kinsarviku",u:"https://www.google.com/maps/dir/Suldalsosen/Låtefossen/Kinsarvik"}]},
+
+{n:11,iso:"2026-07-13",d:"po 13.7.",st:2,title:"🥾 Husedalen — dolina 4 vodopádov (alebo oddych)",drive:"0 km",img:IMG.husedalen,
+plan:["Husedalen priamo z kempu: 12 km, ~5 h, štyri veľké vodopády","ALEBO oddych: bicykle popri fjorde, kúpalisko, trajektík do Utne","Večer gril v kempe, pranie"],
+sleep:"⛺ Kemp Kinsarvik (2. noc)",wild:0,
+tips:["Hardcore alternatíva: Trolltunga (28 km, 10–12 h) — len ak sa cítite výborne; Husedalen je krajší pomer zážitok/námaha"],
+nav:[{t:"Štart Husedalen",u:gs("Husedalen Kinsarvik")}]},
+
+{n:12,iso:"2026-07-14",d:"ut 14.7.",st:2,title:"Vøringsfossen → Voss",drive:"140 km · 3 h",img:IMG.voringsfossen,
+plan:["Cez most Hardangerbrua → Eidfjord → kaňon Måbødalen","Vøringsfossen (182 m) — nové vyhliadkové mosty ponad vodopád","Späť popri fjorde, zastávka Skjervefossen","Večer prechádzka pri jazere vo Vosse"],
+sleep:"Divoko pri Vangsvatnet / parkovisko Tvindefossen (P4N)",wild:1,
+nav:[{t:"Vøringsfossen vyhliadky",u:gs("Vøringsfossen viewpoint")},{t:"→ Voss",u:"https://www.google.com/maps/dir/Eidfjord/Voss"}]},
+
+{n:13,iso:"2026-07-15",d:"st 15.7.",st:2,title:"🛶 Rafting na Vosso → Bergen",drive:"100 km · 1,5 h",img:IMG.voss,
+plan:["~9:00 zraz: základňa Voss Active, Nedkvitnesvegen 25, Skulestadmo","9:30–12:30 Family rafting (plavky + uterák, ostatné požičajú)","Obed vo Vosse","Popoludní presun do Bergenu, večer voľno"],
+book:"🎫 Voss Active 34812 · zraz ~9:00 (presný čas príde mailom) · +47 56 51 05 25",
+sleep:"Bergen bobilparkering (platené státie pre obytky, 2 noci) — do centra MHD",wild:0,
+nav:[{t:"Základňa Voss Active",u:gs("Voss Active Nedkvitnesvegen 25 Skulestadmo")},{t:"→ Bergen",u:"https://www.google.com/maps/dir/Voss/Bergen"}]},
+
+{n:14,iso:"2026-07-16",d:"št 16.7.",st:2,title:"🏘 BERGEN — celý deň bez šoférovania",drive:"MHD",img:IMG.bryggen,
+plan:["Bryggen (UNESCO) — hanzové domčeky","Rybí trh — obed","Lanovka Fløibanen na Fløyen (alebo pešo 45 min) — trolia cesta, výhľady","Voliteľne akvárium","Večer MHD späť"],
+sleep:"Bergen bobilparkering (2. noc)",wild:0,
+tips:["Do centra MHD — s obytkou v Bergene nezaparkuješ","Bergen = 240 daždivých dní v roku, pršiplášte!"],
+nav:[{t:"Bryggen",u:gs("Bryggen Bergen")}]},
+
+{n:15,iso:"2026-07-17",d:"pi 17.7.",st:3,title:"Stegastein → najdlhší tunel sveta → Borgund",drive:"190 km · 4 h",img:IMG.stegastein,
+plan:["E16 z Bergenu, zastávka vodopád Tvindefossen","Stegastein — vyhliadka 650 m nad Aurlandsfjordom","Lærdalský tunel 24,5 km — najdlhší cestný tunel sveta (modré jaskyne)","Borgund stavkirke (1180) — najzachovalejší drevený kostolík Nórska"],
+sleep:"Lærdal — bobilplass pri fjorde alebo divoko",wild:1,
+photos:[IMG.borgund],
+nav:[{t:"Stegastein",u:gs("Stegastein viewpoint")},{t:"Borgund stavkirke",u:gs("Borgund Stave Church")}]},
+
+{n:16,iso:"2026-07-18",d:"so 18.7.",st:3,title:"Sognefjord → Jostedalen, kanoe",drive:"80 km + ⛴ 15 min",img:IMG.urnes,
+plan:["Trajekt Mannheller–Fodnes (15 min, bez rezervácie — ferjekonto zľava)","Solvorn → trajektík (bez auta) do Urnes — najstarší stave church, UNESCO","Cestou hore dolinou: Breheimsenteret (centrum ľadovca)","Popoludní kanoe/kajak, kúpanie"],
+sleep:"Divoko v doline Jostedalen popri rieke (P4N), 2 noci — prespite čo najvyššie, ráno ste pri ľadovci za 10 min",wild:1,
+nav:[{t:"Solvorn (trajektík Urnes)",u:gs("Solvorn ferry Urnes")},{t:"→ Jostedalen",u:"https://www.google.com/maps/dir/Gaupne/Breheimsenteret"}]},
+
+{n:17,iso:"2026-07-19",d:"ne 19.7.",st:3,title:"🧊 NIGARDSBREEN — modrý ľad",drive:"40 km",img:IMG.nigardsbreen,
+plan:["Pohodové ráno, prechádzka k ľadovcovému jazeru","12:00 zraz: parkovisko Nigardsbreen, sklad výstroja so značkou GUIDE (pri toaletách)","12:30–17:00 Blue Ice Hike — loďka cez jazero v cene, mačky, lano, 1,5 h na ľade","OBLEČENIE: celé telo zakryté (žiadne kraťasy!), vetrovka, rukavice, okuliare, desiata, pevná obuv","Večer kúpanie/gril — svetlo do polnoci"],
+book:"🎫 bfl.no 354849621 · zraz 12:00 pri depe GUIDE · +47 57 68 31 11",
+sleep:"Jostedalen divoko (2. noc)",wild:1,
+nav:[{t:"Parkovisko Nigardsbreen",u:gs("Nigardsbreen parking")}]},
+
+{n:18,iso:"2026-07-20",d:"po 20.7.",st:3,title:"🏔 Sognefjellsvegen — najvyššia cesta severu",drive:"130 km · 3 h",img:IMG.sognefjellet,
+plan:["Rv55 cez sedlo 1 434 m: štíty Hurrungane, sneh aj v júli, tyrkysové jazerá","Zastávka rasteplass Mefjellet (kamenná skulptúra)","Zjazd Bøverdalen → Lom: stavkirke + pekáreň Bakeriet i Lom (škoricovky!)","Nákup + voda v Lome","Večer vytiahnuť mýtnou cestou na Juvasshytta (1 850 m)"],
+sleep:"Parkovisko Juvasshytta (1 850 m) — najvyšší nocľah dovolenky, zajtra štart túry o 2 min od dverí",wild:1,
+nav:[{t:"Bakeriet i Lom",u:gs("Bakeriet i Lom")},{t:"Juvasshytta",u:gs("Juvasshytta")}]},
+
+{n:19,iso:"2026-07-21",d:"ut 21.7.",st:3,title:"⛰ GALDHØPIGGEN 2 469 m — strecha Škandinávie",drive:"60 km",img:IMG.galdhopiggen,
+plan:["9:30 zraz pri Juvasshytte (ste na mieste)","10:00 štart: s vodcom v lane cez ľadovec Styggebreen — ~6 h, 620 m prevýšenia","Z vrcholu vidno štvrtinu Nórska","~16:00 dole, zjazd do Bøverdalen, kakao/pivo"],
+book:"🎫 Juvasshytta DL54KO61BC · zraz 9:30 · nerefundovateľné · +47 61 21 15 50",
+sleep:"Bøverdalen divoko pri rieke",wild:1,
+tips:["Teplé vrstvy, čiapka, rukavice, okuliare — hore je ~0–5 °C aj v júli","Pri zlom počasí rozhoduje vodca — riadiť sa ním"],
+nav:[{t:"Juvasshytta",u:gs("Juvasshytta")}]},
+
+{n:20,iso:"2026-07-22",d:"st 22.7.",st:4,title:"🌊 Dalsnibba → GEIRANGER + tichá plavba",drive:"90 km · 2 h",img:IMG.geiranger,
+plan:["~8:30 odchod z Bøverdalen (Rv15)","Mýtna cesta Dalsnibba (~150–300 NOK): Skywalk — fjord z 1 500 m, ráno bez davov","~11:15 zjazd do Geirangeru, parkovanie pri prístave","NÁSTUP DO 12:15: HurtigBoatkai, za turistickou informáciou","12:30–14:30 tichá elektrická fjord cruise — popod Sedem sestier (audio cez appku, slúchadlá!)","Popoludní vyhliadka Flydalsjuvet, kemp, kajak/prechádzka"],
+book:"🎫 Visitgeiranger 638142 · nástup do 12:15 · nerefundovateľné",
+sleep:"⛺ KEMP #2 (povinný — divoko v Geirangeri zakázané) + pranie: Geiranger Camping pri fjorde",wild:0,
+nav:[{t:"Dalsnibba Skywalk",u:gs("Dalsnibba Geiranger Skywalk")},{t:"Prístav Geiranger",u:gs("Geiranger ferjekai")}]},
+
+{n:21,iso:"2026-07-23",d:"št 23.7.",st:4,title:"🛣 TROLLSTIGEN — cesta trolov",drive:"110 km + ⛴ 15 min",img:IMG.trollstigen,
+plan:["Ráno Ørnevegen (Orlia cesta) — posledný pohľad na Geirangerfjord","Trajekt Eidsdal–Linge (15 min, bez rezervácie)","Valldal — jahodová dedina: kúpiť debničku jahôd 🍓","Trollstigen zhora: vyhliadkové plošiny, potom zjazd 11 serpentínami","Dojazd pod Trollveggen — najvyššia kolmá stena Európy (1 100 m)"],
+sleep:"Rasteplass pod Trollveggen — legendárne odpočívadlo s výhľadom na stenu",wild:1,
+photos:[IMG.trollveggen],
+tips:["Trollstigen po zosuvoch znovu otvorený od apríla 2026, zatiaľ bez mýta"],
+nav:[{t:"Trollstigen vyhliadka",u:gs("Trollstigen viewpoint")},{t:"Trollveggen rasteplass",u:gs("Trollveggen rasteplass")}]},
+
+{n:22,iso:"2026-07-24",d:"pi 24.7.",st:4,title:"Romsdal → Ålesund",drive:"120 km · 2 h",img:IMG.rampestreken,
+plan:["Romsdalsgondola na Nesaksla + vyhliadka Rampestreken (alebo pešo hore, 2 h)","Popoludní presun do Ålesundu","Večer: 418 schodov na Aksla — západ slnka nad art-nouveau mestom a ostrovmi"],
+sleep:"Bobilparkering Ålesund (pešo do centra)",wild:0,
+photos:[IMG.alesund],
+nav:[{t:"Romsdalsgondola",u:gs("Romsdalsgondolen Åndalsnes")},{t:"→ Ålesund",u:"https://www.google.com/maps/dir/Åndalsnes/Ålesund"}]},
+
+{n:23,iso:"2026-07-25",d:"so 25.7.",st:5,title:"🌉 ATLANTERHAVSVEIEN — Atlantická cesta",drive:"180 km + ⛴ 35 min",img:IMG.atlanticroad,
+plan:["Dopoludnia Ålesund: secesné centrum, voliteľne akvárium Atlanterhavsparken","Trajekt Vestnes–Molde (ferjekonto zľava)","Pobrežná cesta cez Bud (rybárska dedinka)","Atlantic Ocean Road — most Storseisundet, chodníky Eldhusøya","Večer rybačka z mostov (morská = zadarmo!) + západ slnka"],
+sleep:"Parkovisko/bobilplass priamo pri Atlantic Road (Myrbærholmen) — jeden z naj nocľahov",wild:1,
+nav:[{t:"Atlantic Road / Eldhusøya",u:gs("Eldhusøya Atlanterhavsveien")}]},
+
+{n:24,iso:"2026-07-26",d:"ne 26.7.",st:5,title:"→ Trondheim",drive:"200 km · 4 h s trajektom",img:IMG.nidaros,
+plan:["Ráno ešte raz mosty, kostolík Kvernes","Kristiansund → podmorský Atlanterhavstunnel","Trajekt Halsa–Kanestraum → E39","Večer Trondheim: katedrála Nidaros, farebné sklady Bakklandet, most Gamle Bybro"],
+sleep:"Bobilparkering Trondheim (prístav, pešo do centra)",wild:0,
+late:"Tu sa dá ušetriť 1,5 dňa: ak meškáte, vynechajte Trondheim a choďte z Åndalsnes rovno cez Dombås na E6 juh.",
+nav:[{t:"→ Trondheim",u:"https://www.google.com/maps/dir/Kristiansund/Trondheim"},{t:"Nidaros",u:gs("Nidaros Cathedral")}]},
+
+{n:25,iso:"2026-07-27",d:"po 27.7.",st:5,title:"E6 na juh cez Dovrefjell",drive:"340 km · 5 h",img:IMG.snohetta,
+plan:["Doobeda krátko Trondheim (pevnosť Kristiansten?)","E6 na juh","Dovrefjell: Viewpoint Snøhetta / Tverrfjellhytta (20 min pešo) — šanca na pižmone","Podvečer Hunderfossen/Lillehammer"],
+sleep:"⛺ KEMP #3 + posledné pranie: Hunderfossen camping",wild:0,
+nav:[{t:"Viewpoint Snøhetta",u:gs("Viewpoint Snøhetta Tverrfjellhytta")},{t:"→ Lillehammer",u:"https://www.google.com/maps/dir/Trondheim/Lillehammer"}]},
+
+{n:26,iso:"2026-07-28",d:"ut 28.7.",st:6,title:"🎿 Lillehammer → Oslo",drive:"185 km · 2,5 h",img:IMG.lillehammer,
+plan:["Olympijský park ZOH 1994: skokanské mostíky Lysgårdsbakkene (sedačka hore)","Zjazd bobom na kolieskach — pre Lea povinnosť","Alternatíva: pol dňa Hunderfossen park (trolí svet)","Popoludní → Oslo (mýtny okruh ide cez Epass24 sám)"],
+sleep:"Sjølyst Marina bobilparkering (5 km od centra, MHD) / Bogstad camping",wild:0,
+nav:[{t:"Olympijský park",u:gs("Lysgårdsbakkene Lillehammer")},{t:"→ Oslo",u:"https://www.google.com/maps/dir/Lillehammer/Oslo"}]},
+
+{n:27,iso:"2026-07-29",d:"st 29.7.",st:6,title:"🏛 OSLO do obeda → ⛴ nočný trajekt",drive:"590 km · 6,5 h + ⛴ noc",img:IMG.oslo,
+plan:["Ráno: strecha Opery, Vigelandov park; prípadne Fram/Kon-Tiki (Bygdøy)","NAJNESKÔR 13:00 ODCHOD — E6 Göteborg → Malmö → Ystad (večera cestou)","CHECK-IN V YSTADE DO 20:45 (povinných 120 min, doklady všetci!)","22:45 M/F Polonia → Świnoujście, kajuta č. 363 — spíte na mori"],
+book:"🎫 POLSCA IT0027107 · check-in do 20:45 · kajuta 4-os. č. 363 · hotline +48 455 455 040",
+sleep:"Kajuta na trajekte",wild:0,
+late:"NAJTVRDŠIA KOTVA CESTY. Dojazd do Ystadu: z Osla 6,5 h · z Lillehammeru 8,5 h · z Trondheimu ~13 h. Radšej škrtnúť Oslo než riskovať.",
+photos:[IMG.vigeland],
+nav:[{t:"Opera Oslo",u:gs("Oslo Opera House")},{t:"→ Ystad ferry terminal",u:"https://www.google.com/maps/dir/Oslo/Ystad+Ferry+Terminal"}]},
+
+{n:28,iso:"2026-07-30",d:"št 30.7.",st:6,title:"Poľsko → Košice",drive:"950 km · 10–11 h",img:IMG.wroclaw,
+plan:["~06:45 vylodenie Świnoujście","S3 Štetín → Poznaň","Vroclav: obed na Rynku (30 min od diaľnice — odporúčaná pauza)","Katovice → Krakov → Košice ~21:00–22:00 (na striedačku)"],
+sleep:"Doma 🙂 (karavan pred domom)",wild:1,
+nav:[{t:"Świnoujście → Košice",u:"https://www.google.com/maps/dir/Świnoujście/Wrocław/Košice"}]},
+
+{n:29,iso:"2026-07-31",d:"pi 31.7.",st:6,title:"Odovzdanie karavanu",drive:"80 km",img:null,
+plan:["Dotankovať naftu + AdBlue DO PLNA (povinné)","Vyprázdniť odpadové nádrže a WC, vyčistiť interiér","Presun do Bardejova — odovzdanie do 18:00 (ideálne doobeda)","Kaucia 1 000 € sa vracia do 5 dní"],
+sleep:"Vlastná posteľ 🛏",wild:1,
+nav:[{t:"→ Karavany Bardejov, Duklianska 16",u:gs("Duklianska 1372/16 Bardejov")}]}
+];
+
+/* ============ TICKETS ============ */
+const TIX=[
+{w:"ne 5.7.",t:"Legoland Billund — 3× vstup + 2× Bronze Fastrack",r:"obj. 605090076",note:"Lístky v LEGOLAND appke. Fastrack neprenosný, skipy platia len 5.7."},
+{w:"ut 7.7. · 20:45",t:"⛴ Hirtshals → Kristiansand · Color Line SuperSpeed 1",r:"WKV6879",note:"Check-in do 19:45, doklady všetci. V cene večerný bufet ×3 + prednostné vylodenie. Príchod 23:59."},
+{w:"pi 10.7. · 12:55",t:"⛴ Lysebotn → Lauvvik (Lysefjord)",r:"Kolumbus 5323509360",note:"Na móle najneskôr 12:35! Príchod 15:35. Lístok v mobile."},
+{w:"st 15.7. · 9:30",t:"🛶 Family rafting Vosso · Voss Active",r:"34812",note:"Zraz ~9:00, Nedkvitnesvegen 25, Skulestadmo. Plavky + uterák."},
+{w:"ne 19.7. · 12:30",t:"🧊 Nigardsbreen Short Blue Ice Hike (do 17:00)",r:"bfl.no 354849621",note:"Zraz 12:00 pri depe GUIDE. Celé telo zakryté, rukavice, desiata, pevná obuv."},
+{w:"ut 21.7. · 10:00",t:"⛰ Galdhøpiggen s vodcom z Juvasshytty",r:"DL54KO61BC",note:"Zraz 9:30. Nerefundovateľné. + mýto cesty na mieste."},
+{w:"st 22.7. · 12:30",t:"🛥 Tichá fjord cruise Geiranger (do 14:30)",r:"638142",note:"Nástup do 12:15, HurtigBoatkai za turistickou informáciou. Audio cez appku."},
+{w:"st 29.7. · 22:45",t:"⛴ Ystad → Świnoujście · M/F Polonia · kajuta 363",r:"POLSCA IT0027107",note:"Check-in do 20:45 (120 min povinných)! Doklady všetci. Z Osla odísť do 13:00."}
+];
+
+/* ============ CONTACTS ============ */
+const CONTACTS=[
+["🚨 Tieseň (EÚ aj Nórsko)","112","tel:112"],
+["🚑 Záchranka Nórsko","113","tel:113"],
+["🚒 Hasiči Nórsko","110","tel:110"],
+["🩺 Lekár (nie tieseň), NO","116 117","tel:116117"],
+["🚐 Požičovňa — Darina, Karavany Bardejov","+421 911 825 252","tel:+421911825252"],
+["⛴ Color Line","+47 22 94 42 00","tel:+4722944200"],
+["🛶 Voss Active","+47 56 51 05 25","tel:+4756510525"],
+["🧊 Jostedalen Breførarlag (ľadovec)","+47 57 68 31 11","tel:+4757683111"],
+["⛰ Juvasshytta","+47 61 21 15 50","tel:+4761211550"],
+["🛥 Visitgeiranger","+47 70 26 30 07","tel:+4770263007"],
+["⛴ POLSCA (trajekt domov)","+48 455 455 040","tel:+48455455040"],
+["🛣 Nórske cesty — dopravné info","+47 22 17 51 75","tel:+4722175175"],
+["💳 AutoPASS ferje (Skyttel)","post@autopassferje.no","mailto:post@autopassferje.no"]
+];
+
+/* ============ STATE ============ */
+const LS=k=>{try{return JSON.parse(localStorage.getItem(k)||"{}")}catch(e){return{}}};
+const SAVE=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+let done=LS("done"), pack=LS("pack");
+
+function todayIdx(){
+  const t=new Date(); const y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,"0"),d=String(t.getDate()).padStart(2,"0");
+  const iso=`${y}-${m}-${d}`;
+  return DAYS.findIndex(x=>x.iso===iso);
+}
+function daysToStart(){
+  const ms=new Date("2026-07-03T08:00:00")-new Date();
+  return Math.ceil(ms/86400000);
+}
+
+/* ============ RENDER: DAYS ============ */
+function renderDays(){
+  const ti=todayIdx(); let h="";
+  if(ti>=0){
+    const d=DAYS[ti];
+    h+=`<div class="todaycard" onclick="openDay(${ti})">
+      <img src="${d.img||IMG.sognefjellet}" alt="">
+      <div class="badge">DNES · deň ${d.n}/29</div>
+      <div class="ov"><div class="d">${d.d} · ${d.drive}</div><h3>${d.title}</h3></div></div>`;
+  } else if(daysToStart()>0){
+    h+=`<div class="cnt">🚐 Do odchodu zostáva <b>${daysToStart()}</b> dní<br><span style="font-size:12.5px;color:var(--muted)">3. 7. 2026, 8:00 — prevzatie karavanu v Bardejove</span></div>`;
+  }
+  let st=-1;
+  DAYS.forEach((d,i)=>{
+    if(d.st!==st){st=d.st;h+=`<div class="stagehead">${STAGES[st]}</div>`;}
+    const past=ti>=0&&i<ti;
+    h+=`<div class="dayrow${past?" past":""}" onclick="openDay(${i})">
+      <div class="thumb" style="background-image:url('${d.img||""}')"></div>
+      <div class="tx"><div class="dt">${d.d} · DEŇ ${d.n}${i===ti?' · <span style="color:var(--red)">DNES</span>':''}</div>
+      <h4>${d.title}</h4>
+      <div class="meta">🚐 ${d.drive}${d.book?' · <b>🎫</b>':''}${d.wild?' · 🌙 divoko':' · ⛺'}</div></div></div>`;
+  });
+  document.getElementById("v-days").innerHTML=h;
+}
+
+/* ============ RENDER: DETAIL ============ */
+let cur=-1;
+function openDay(i){
+  cur=i; const d=DAYS[i];
+  const dd=done[d.n]||{};
+  let h=`<div class="hero">
+    <img src="${d.img||IMG.sognefjellet}" alt="">
+    <button class="back" onclick="closeDay()">‹ Späť</button>
+    <div class="ov"><div class="d">${d.d} · deň ${d.n}/29 · ${STAGES[d.st]}</div><h2>${d.title}</h2></div>
+  </div><div class="dbody">
+  <span class="pill">🚐 ${d.drive}</span>${d.book?'<span class="pill green">🎫 rezervované</span>':''}${d.wild?'<span class="pill" style="background:#7b6cb1">🌙 nocľah divoko</span>':''}`;
+  if(d.book) h+=`<div class="box book"><b>${d.book}</b></div>`;
+  h+=`<div class="sec"><h5>Program — ťukni a odškrtni</h5><ul class="plan">`;
+  d.plan.forEach((p,j)=>{h+=`<li class="${dd[j]?"done":""}" onclick="tog(${d.n},${j},this)">${p}</li>`;});
+  h+=`</ul></div>`;
+  h+=`<div class="box sleep">🛌 <b>Nocľah:</b> ${d.sleep}</div>`;
+  if(d.late) h+=`<div class="box late">⏱ <b>Ak meškáte:</b> ${d.late}</div>`;
+  (d.tips||[]).forEach(t=>{h+=`<div class="box tip">💡 ${t}</div>`;});
+  if(d.nav&&d.nav.length){h+=`<div class="navbtns">`;d.nav.forEach((n,j)=>{h+=`<a href="${n.u}" target="_blank" class="${j?"sec2":""}">📍 ${n.t}</a>`;});h+=`</div>`;}
+  if(d.photos&&d.photos.length){h+=`<div class="sec"><h5>Viac fotiek</h5><div class="gallery">`;d.photos.forEach(p=>h+=`<img src="${p}" loading="lazy">`);h+=`</div></div>`;}
+  h+=`<div class="prevnext">
+    <button ${i===0?"disabled":""} onclick="openDay(${i-1})">‹ ${i>0?DAYS[i-1].d:""}</button>
+    <button ${i===DAYS.length-1?"disabled":""} onclick="openDay(${i+1})">${i<DAYS.length-1?DAYS[i+1].d:""} ›</button>
+  </div></div>`;
+  const el=document.getElementById("detail");
+  el.innerHTML=h; el.classList.add("open"); el.scrollTop=0;
+}
+function closeDay(){document.getElementById("detail").classList.remove("open");renderDays();}
+function tog(n,j,el){done[n]=done[n]||{};done[n][j]=!done[n][j];SAVE("done",done);el.classList.toggle("done");}
+
+/* ============ RENDER: MAP ============ */
+const PINS=[[182,305,2,"Legoland"],[235,233,4,"Skagen"],[143,218,5,"Kristiansand"],[95,185,6,"Kjerag"],[79,188,8,"Preikestolen"],[97,138,9,"Kinsarvik"],[46,137,13,"Bergen"],[111,120,14,"Stegastein"],[118,101,16,"Nigardsbreen"],[162,85,17,"Lom"],[114,76,19,"Geiranger"],[132,59,20,"Trollstigen"],[77,62,21,"Ålesund"],[120,42,22,"Atlantic Rd"],[228,28,23,"Trondheim"],[230,111,25,"Lillehammer"],[241,154,26,"Oslo"],[350,316,26,"Ystad"],[466,471,27,"Vroclav"],[615,557,28,"Košice"]];
+function renderMap(){
+  let pins="";
+  PINS.forEach(p=>{
+    pins+=`<g class="mappin" onclick="openDay(${p[2]})"><circle cx="${p[0]}" cy="${p[1]}" r="9" fill="#c8402f" stroke="#fff" stroke-width="2"/><text x="${p[0]}" y="${p[1]+3.5}" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">${DAYS[p[2]].n}</text><text x="${p[0]}" y="${p[1]-13}" text-anchor="middle" font-size="11" fill="#16324f" font-weight="bold">${p[3]}</text></g>`;
+  });
+  document.getElementById("v-map").innerHTML=`
+  <h2 class="vt">Mapa trasy</h2>
+  <p class="lead">Ťukni na červený bod — otvorí sa daný deň. Číslo = deň výpravy.</p>
+  <div class="mapbox"><svg viewBox="0 0 760 620" xmlns="http://www.w3.org/2000/svg">
+  <rect width="760" height="620" fill="#dcebf5"/>
+  <g fill="none" stroke="#c8402f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
+    <path d="M615,557 L569,509 L466,471 L336,420 L215,383 L182,305 L145,292 L160,260 L235,233 L213,238"/>
+    <path d="M213,238 L143,218" stroke-dasharray="7 5"/>
+    <path d="M143,218 L95,185 L79,188 L97,138 L86,129 L46,137 L111,120 L125,112 L118,101 L162,85 L114,76 L132,59 L77,62 L120,42 L228,28"/>
+    <path d="M228,28 L230,111 L241,154 L284,234 L350,316"/>
+    <path d="M350,316 L366,370" stroke-dasharray="7 5"/>
+    <path d="M366,370 L462,425 L466,471 L536,502 L615,557"/>
+  </g>
+  <g font-family="Arial" font-size="12" fill="#5c6f80" font-style="italic">
+    <text x="120" y="165">NÓRSKO</text><text x="290" y="260">ŠVÉDSKO</text>
+    <text x="150" y="300">DÁNSKO</text><text x="330" y="450">POĽSKO</text><text x="200" y="420">NEMECKO</text>
+  </g>${pins}</svg></div>
+  <div class="navbtns" style="margin-top:12px">
+    <a href="https://www.google.com/maps/dir/Košice/Billund/Kristiansand/Preikestolen/Kinsarvik/Bergen/Gaupne/Lom/Geiranger/Åndalsnes" target="_blank">📍 Celá trasa v Google Maps (1. polovica)</a>
+    <a class="sec2" href="https://www.google.com/maps/dir/Åndalsnes/Ålesund/Kristiansund/Trondheim/Lillehammer/Oslo/Ystad" target="_blank">📍 Celá trasa v Google Maps (2. polovica)</a>
+  </div>`;
+}
+
+/* ============ RENDER: TICKETS ============ */
+function renderTix(){
+  let h=`<h2 class="vt">Lístky a rezervácie</h2><p class="lead">Všetko kúpené ✅ — PDF lístky sú na Drive v priečinku „norsko / rezervacie a listky" (stiahnuté offline v mobile + 1 papierová sada v karavane).</p>`;
+  TIX.forEach(t=>{h+=`<div class="tix"><div class="when">${t.w}</div><h4>${t.t}</h4><div class="ref">Rezervácia: <b>${t.r}</b></div><div class="note">${t.note}</div></div>`;});
+  h+=`<div class="infocard"><h3>✅ Vybavená administratíva</h3><ul>
+  <li><b>Epass24</b> — PO282IN + karta → nórske mýto sa platí samo</li>
+  <li><b>AutoPASS ferjekonto</b> — záloha 2 200 NOK zaplatená → 50 % zľava na fjordové trajekty (kamera číta ŠPZ). Po návrate refund zostatku + zrušiť registrácie</li>
+  <li><b>Revolut Premium</b> — cestovné poistenie + kurzy NOK/DKK/PLN</li>
+  <li><b>Park4Night Pro</b> — offline mapy spotov</li></ul></div>`;
+  document.getElementById("v-tix").innerHTML=h;
+}
+
+/* ============ RENDER: PLAN B ============ */
+function renderPlanB(){
+  document.getElementById("v-planb").innerHTML=`
+  <h2 class="vt">Plán B — keď sa niečo zvrtne</h2>
+  <p class="lead">Trasa je jedna línia, takže platí: drž kotvy, všetko ostatné sa dá škrtať alebo presúvať.</p>
+
+  <div class="anchor"><span class="ic">⚓</span><div><b class="t">ut 7.7. · 19:45 Hirtshals</b> — check-in na trajekt. Zo Skagenu 1 h, z Billundu 3 h. Pri zmeškaní volať Color Line (prebookujú za poplatok, chodia aj ranné spoje).</div></div>
+  <div class="anchor"><span class="ic">⚓</span><div><b class="t">pi 10.7. · 12:35 Lysebotn mólo</b> — ak nestíhate: obchádzka cez Sinnes–Byrkjedal (+3,5 h), strata len 819 NOK.</div></div>
+  <div class="anchor"><span class="ic">🎫</span><div><b class="t">19.7. 12:00 ľadovec · 21.7. 9:30 Galdhøpiggen · 22.7. 12:15 cruise</b> — nerefundovateľné, ale posúvateľné telefonicky (kontakty v Info). Pri meškaní volať HNEĎ, nie deň vopred.</div></div>
+  <div class="anchor" style="border-left-width:8px"><span class="ic">⚓⚓</span><div><b class="t">st 29.7. · 20:45 Ystad</b> — NAJTVRDŠIA KOTVA. Orientačný dojazd do Ystadu: <b>z Osla 6,5 h · z Lillehammeru 8,5 h · z Trondheimu ~13 h · z Ålesundu ~15 h</b>. Čiže: ráno 29.7. musíte byť najďalej v Osle. Radšej škrtnúť Oslo než riskovať loď.</div></div>
+  <div class="anchor"><span class="ic">⚓</span><div><b class="t">pi 31.7. · do 18:00 Bardejov</b> — vrátenie karavanu (dotankovaný do plna!). Zo Świnoujścia je to 9,5 h — máte celý deň 30.7. + doobedie 31.7. rezervu.</div></div>
+
+  <div class="infocard"><h3>✂️ Škrtací poriadok pri meškaní (v tomto poradí)</h3><ul>
+  <li><b>1. Mestá</b> — Bergen z celého dňa na pol dňa, Ålesund len prejazd, Trondheim vynechať, Oslo len prejazd</li>
+  <li><b>2. Oddychové dni</b> — 13.7. Husedalen, 18.7. kanoe/Urnes</li>
+  <li><b>3. Lillehammer</b> (28.7.) — pekné, ale nie kľúčové</li>
+  <li><b>4. Atlantic Road + Trondheim slučka</b> — vynechanie šetrí ~1,5 dňa: z Åndalsnes rovno cez Dombås na E6 juh</li>
+  <li><b>5. Túry</b> — len pri zlom počasí/zranení (sú zaplatené); Kjerag a Preikestolen sa dajú aj skrátiť (vyhliadky cestou)</li>
+  <li><b>Nikdy neškrtať:</b> kotvy ⚓ — trajekty a odovzdanie karavanu</li></ul></div>
+
+  <div class="infocard"><h3>➕ Ak naopak predbiehate plán</h3><ul>
+  <li>Deň navyše vo Flåme: železnica Flåmsbana / elektrická loď po Nærøyfjorde (UNESCO)</li>
+  <li>Trolltunga z Oddy (10–12 h) — len za dobrého počasia</li>
+  <li>Deň pri mori na Atlantic Road: rybačka, Kvernes, Bud</li>
+  <li>Švédsko: zastávka Göteborg (Liseberg) alebo pláže Skåne pred trajektom</li></ul></div>
+
+  <div class="infocard"><h3>🚨 Núdza s karavanom</h3><ul>
+  <li>Nehoda/porucha: 1. Darina (+421 911 825 252) — poistka a asistenčka idú cez požičovňu, 2. polícia k nehode: 112</li>
+  <li>Spísať EÚ záznam o nehode, fotiť všetko</li>
+  <li>Choroba: lekár 116 117 (Nórsko, nie tieseň), tieseň 113; EHIC kartičky + Revolut poistenie</li>
+  <li>Mešká sa všade ľahko — pozri kotvy hore a volaj hneď, čo sa dá posunúť</li></ul></div>`;
+}
+
+/* ============ RENDER: INFO ============ */
+const PACKLIST=["Pasy/občianky všetci + vodičák","EHIC kartičky + Revolut karta","Lístky offline v mobile + vytlačená sada","Pevná turistická obuv ×3","Vrstvy: vetrovky, čiapky, rukavice (ľadovec!)","Plavky, uteráky, rýchloschnúce","Pršiplášte / goretex","Bicykle + prilby + zámok","Rybársky prút + blyskáče (more zadarmo)","Gril + uhlie/plyn","Predlžovačka + CEE redukcia, vodná hadica","Powerbanky, slúchadlá (audio guide), spacie masky","Repelent, opaľovací krém, lekárnička","Desiatové boxy, termosky","Jedlo: trvanlivé + mäso vákuovo (max 10 kg/os!)","Alkohol v limite: 1 l + 1,5 l vína + 2 l piva /os","Zmluva o prenájme + tel. na Darinu"];
+function renderInfo(){
+  let cts="";CONTACTS.forEach(c=>{cts+=`<div class="contact"><span>${c[0]}</span><a href="${c[2]}">${c[1]}</a></div>`;});
+  let pl="";PACKLIST.forEach((p,i)=>{pl+=`<li class="${pack[i]?"done":""}" onclick="togPack(${i},this)">${p}</li>`;});
+  document.getElementById("v-info").innerHTML=`
+  <h2 class="vt">Dôležité info</h2>
+
+  <div class="infocard"><h3>📞 Kontakty</h3>${cts}</div>
+
+  <div class="infocard"><h3>🌙 Nocovanie divoko — pravidlá</h3><ul>
+  <li>Karavan vždy len na ceste/parkovisku/odpočívadle — nikdy nie v teréne</li>
+  <li>Min. 150 m od domov, max. 24 h na mieste</li>
+  <li>„Camping forbudt" / preškrtnutý karavan = platí, pokutujú</li>
+  <li>Geiranger: divoko ZAKÁZANÉ → kemp</li>
+  <li>Voda a výlevka: bobilplasser, Circle K/YX so servisom, kemp za poplatok aj bez noci (Park4Night filter)</li>
+  <li>Top spoty: Øygardstøl · Suldalsvatnet · Mefjellet (Sognefjell) · parkovisko Juvasshytta · rasteplass Trollveggen · Myrbærholmen (Atlantic Rd)</li></ul></div>
+
+  <div class="infocard"><h3>🚗 Jazda v Nórsku</h3><ul>
+  <li>80 km/h mimo obce (100–110 diaľnice) — pokuty brutálne (od ~500 €), merače všade</li>
+  <li>Alkohol max 0,2 ‰ = nula</li>
+  <li>Mýto: brány bez závor, fotia ŠPZ → Epass24 platí samo</li>
+  <li>Fjordové trajekty: prídeš a ideš, platba cez ŠPZ (ferjekonto −50 %), rezervácia len Lysefjord</li>
+  <li>Appka Vegvesen Trafikk = uzávierky naživo</li></ul></div>
+
+  <div class="infocard"><h3>🛒 Jedlo a nákupy</h3><ul>
+  <li>Lacné reťazce: <b>Rema 1000, Kiwi, Extra</b> (privátka First Price); ceny ~1,5–2× SK</li>
+  <li>Voda z kohútika pitná všade — nekupovať</li>
+  <li>Karta platí všade, hotovosť netreba</li>
+  <li>Alkohol v obchode len do 4,75 % a len do 20:00 (so 18:00); silnejší len Vinmonopolet</li>
+  <li>Jahody vo Valldale, cider v Hardangeri, škoricovky v Lome 🙂</li></ul></div>
+
+  <div class="infocard"><h3>🎣 Zadarmo</h3><ul>
+  <li>Rybačka v mori a fjordoch BEZ povolenky (ručný výstroj; min. veľkosti rýb; rieky/jazerá = povolenka)</li>
+  <li>Kúpanie: fjordy ~16–18 °C, jazerá teplejšie</li>
+  <li>V júli takmer nezapadá slnko — túry sa dajú aj večer; spacie masky!</li></ul></div>
+
+  <div class="infocard"><h3>📱 Appky</h3><ul>
+  <li>Park4Night Pro ✅ · NorCamp — nocľahy</li>
+  <li>Epass24 ✅ · Vegvesen Trafikk — cesty</li>
+  <li>Yr.no + Windy — počasie (Yr je nórsky, najpresnejší)</li>
+  <li>Kolumbus Billett — lístok Lysefjord · LEGOLAND · UT.no — túry</li>
+  <li>Google Maps offline: južné Nórsko + Dánsko + Poľsko</li></ul></div>
+
+  <div class="infocard"><h3>🧳 Balenie — odklikávaj</h3><ul class="cl">${pl}</ul></div>
+
+  <div class="infocard" style="text-align:center;color:var(--muted);font-size:12.5px;border:none;background:none">
+  Nórsko 2026 · Marek · Denisa · Leo · Bürstner Lyseo 690G (PO282IN)<br>fotky: Wikimedia Commons (CC)</div>`;
+}
+function togPack(i,el){pack[i]=!pack[i];SAVE("pack",pack);el.classList.toggle("done");}
+
+/* ============ NAV ============ */
+document.querySelectorAll("nav.tabs button").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll("nav.tabs button").forEach(x=>x.classList.remove("on"));
+    b.classList.add("on");
+    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+    document.getElementById("v-"+b.dataset.v).classList.add("active");
+    closeDay(); window.scrollTo(0,0);
+  });
+});
+
+renderDays();renderMap();renderTix();renderPlanB();renderInfo();
+const ti=todayIdx(); if(ti>=0) setTimeout(()=>openDay(ti),400);
+
+/* offline */
+if("serviceWorker" in navigator && location.protocol==="https:"){
+  navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
