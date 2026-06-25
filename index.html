@@ -187,7 +187,7 @@ const STAGES=["Etapa 1 · Presun & Dánsko","Etapa 2 · Lysefjord","Etapa 3 · H
 /* ============ DAYS ============ */
 const DAYS=[
 {n:1,iso:"2026-07-03",d:"pi 3.7.",st:0,title:"Prevzatie karavanu, nočný odjazd",drive:"~750 km · noc",img:null,
-plan:["8:00 prevzatie karavanu v Bardejove (plná nafta + AdBlue, nafotiť stav!)","Košice — balenie, bicykle na nosič","~17:00 odchod: Prešov → Krakov → Katovice → Vroclav → smer Berlín"],
+plan:["Ráno multivanom do Bardejova (práca v Prešove cestou) — MULTIVAN NECHAŤ V AREÁLI POŽIČOVNE (čaká tam celý mesiac → vyrieši návrat domov)","Poobede prevzatie karavanu (plná nafta + AdBlue, nafotiť stav!)","Presun do Košíc — balenie, bicykle na nosič","~večer odchod: Prešov → Krakov → Katovice → Vroclav → smer Berlín"],
 sleep:"~01:00 odpočívadlo na nemeckej diaľnici za PL hranicou",wild:1,
 tips:["Poľská A4: mýto ~10–15 €, platba kartou/appka Autopay","Šoférujte na striedačku, v noci sa ide najlepšie"],
 nav:[{t:"Navigovať: Košice → Berlín",u:"https://www.google.com/maps/dir/Košice/Wrocław/Berlin"}]},
@@ -347,15 +347,16 @@ late:"NAJTVRDŠIA KOTVA CESTY. Dojazd do Ystadu: z Osla 6,5 h · z Lillehammeru 
 photos:[IMG.vigeland],
 nav:[{t:"Opera Oslo",u:gs("Oslo Opera House")},{t:"→ Ystad ferry terminal",u:"https://www.google.com/maps/dir/Oslo/Ystad+Ferry+Terminal"}]},
 
-{n:28,iso:"2026-07-30",d:"št 30.7.",st:6,title:"Poľsko → Košice",drive:"950 km · 10–11 h",img:IMG.wroclaw,
-plan:["~06:45 vylodenie Świnoujście","S3 Štetín → Poznaň","Vroclav: obed na Rynku (30 min od diaľnice — odporúčaná pauza)","Katovice → Krakov → Košice ~21:00–22:00 (na striedačku)"],
-sleep:"Doma 🙂 (karavan pred domom)",wild:1,
-nav:[{t:"Świnoujście → Košice",u:"https://www.google.com/maps/dir/Świnoujście/Wrocław/Košice"}]},
+{n:28,iso:"2026-07-30",d:"št 30.7.",st:6,title:"Świnoujście → Krakov (posledná noc v karavane)",drive:"620 km · 6,5 h",img:IMG.wroclaw,
+plan:["~06:45 vylodenie Świnoujście","S3 Štetín → Poznaň","Vroclav: obed na Rynku (30 min od diaľnice)","→ A4 na Krakov, príchod podvečer","Voliteľne večerná prechádzka po Starom meste / Rynku","Pohodový deň po nočnom trajekte — žiadny 11-hodinový záťah"],
+sleep:"Posledná noc v karavane — stellplatz/kemp pri Krakove (Park4Night; v PL nie je voľné státie ako v NO)",wild:0,
+nav:[{t:"Świnoujście → Krakov (cez Vroclav)",u:"https://www.google.com/maps/dir/Świnoujście/Wrocław/Kraków"},{t:"Stellplatzy pri Krakove",u:"https://www.google.com/maps/search/?api=1&query=camper+stellplatz+Kraków"}]},
 
-{n:29,iso:"2026-07-31",d:"pi 31.7.",st:6,title:"Odovzdanie karavanu",drive:"80 km",img:null,
-plan:["Dotankovať naftu + AdBlue DO PLNA (povinné)","Vyprázdniť odpadové nádrže a WC, vyčistiť interiér","Presun do Bardejova — odovzdanie do 18:00 (ideálne doobeda)","Kaucia 1 000 € sa vracia do 5 dní"],
+{n:29,iso:"2026-07-31",d:"pi 31.7.",st:6,title:"Krakov → Bardejov: odovzdanie → domov autom",drive:"130 + 80 km",img:null,
+plan:["Ráno Krakov → Bardejov (~2,5 h, cez hranicu Barwinek)","Pred Bardejovom dotankovať NAFTU + AdBlue DO PLNA (povinné) + vyprázdniť nádrže a WC","V Bardejove: umytie/vyčistenie vnútra podľa dohody s p. Hajduom, vyloženie vecí","Preložiť veci + prehodiť 3 bicykle z karavanu na MULTIVAN (čaká v areáli), nosič ostáva na aute","Odovzdanie do 18:00 (pohodlne doobeda/poobede) → domov do Košíc vlastným autom (~1h15)","Kaucia 1 000 € sa vracia do 5 dní"],
 sleep:"Vlastná posteľ 🛏",wild:1,
-nav:[{t:"→ Karavany Bardejov, Duklianska 16",u:gs("Duklianska 1372/16 Bardejov")}]}
+tips:["Multivan si nechal v areáli požičovne hneď 3.7. ráno — preto sa z Bardejova dostaneš domov bez riešenia"],
+nav:[{t:"Krakov → Bardejov",u:"https://www.google.com/maps/dir/Kraków/Bardejov"},{t:"Karavany Bardejov, Duklianska 16",u:gs("Duklianska 1372/16 Bardejov")}]}
 ];
 
 /* ============ TICKETS ============ */
@@ -509,7 +510,7 @@ function renderPlanB(){
   <div class="anchor"><span class="ic">⚓</span><div><b class="t">pi 10.7. · 12:35 Lysebotn mólo</b> — ak nestíhate: obchádzka cez Sinnes–Byrkjedal (+3,5 h), strata len 819 NOK.</div></div>
   <div class="anchor"><span class="ic">🎫</span><div><b class="t">19.7. 12:00 ľadovec · 21.7. 9:30 Galdhøpiggen · 22.7. 12:15 cruise</b> — nerefundovateľné, ale posúvateľné telefonicky (kontakty v Info). Pri meškaní volať HNEĎ, nie deň vopred.</div></div>
   <div class="anchor" style="border-left-width:8px"><span class="ic">⚓⚓</span><div><b class="t">st 29.7. · 20:45 Ystad</b> — NAJTVRDŠIA KOTVA. Orientačný dojazd do Ystadu: <b>z Osla 6,5 h · z Lillehammeru 8,5 h · z Trondheimu ~13 h · z Ålesundu ~15 h</b>. Čiže: ráno 29.7. musíte byť najďalej v Osle. Radšej škrtnúť Oslo než riskovať loď.</div></div>
-  <div class="anchor"><span class="ic">⚓</span><div><b class="t">pi 31.7. · do 18:00 Bardejov</b> — vrátenie karavanu (dotankovaný do plna!). Zo Świnoujścia je to 9,5 h — máte celý deň 30.7. + doobedie 31.7. rezervu.</div></div>
+  <div class="anchor"><span class="ic">⚓</span><div><b class="t">pi 31.7. · do 18:00 Bardejov</b> — vrátenie karavanu (dotankovaný do plna!). Návrat rozdelený: 30.7. Świnoujście→Krakov (sleep v karavane), 31.7. Krakov→Bardejov (~2,5 h) → preložiť na multivan → domov. Veľká rezerva, žiadny nočný záťah.</div></div>
 
   <div class="infocard"><h3>✂️ Škrtací poriadok pri meškaní (v tomto poradí)</h3><ul>
   <li><b>1. Mestá</b> — Bergen z celého dňa na pol dňa, Ålesund len prejazd, Trondheim vynechať, Oslo len prejazd</li>
