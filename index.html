@@ -26,8 +26,16 @@ header.top .sub{font-size:11.5px;opacity:.85}
 /* bottom nav */
 nav.tabs{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#fff;border-top:1px solid var(--line);
 display:flex;padding-bottom:env(safe-area-inset-bottom)}
-nav.tabs button{flex:1;background:none;border:none;padding:8px 0 6px;font-size:10.5px;color:var(--muted);cursor:pointer}
-nav.tabs button .ic{display:block;font-size:20px;margin-bottom:1px}
+nav.tabs button{flex:1;background:none;border:none;padding:8px 0 6px;font-size:9.5px;color:var(--muted);cursor:pointer}
+nav.tabs button .ic{display:block;font-size:18px;margin-bottom:1px}
+.wpday{font-weight:800;font-size:12px;letter-spacing:1px;color:#fff;background:var(--blue);border-radius:8px;padding:4px 12px;margin:14px 2px 6px;display:inline-block}
+.wprow{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 11px;margin:5px 0}
+.wpic{font-size:20px;flex:none;width:26px;text-align:center}
+.wptx{flex:1;min-width:0}
+.wpnm{font-size:14px;color:var(--navy);font-weight:600;line-height:1.25}
+.wpalt{font-size:11.5px;color:var(--muted)}
+.wpalt a{color:var(--blue);text-decoration:none;font-weight:700}
+.wpw{flex:none;text-align:right;font-size:13.5px;white-space:nowrap}
 nav.tabs button.on{color:var(--blue);font-weight:700}
 /* day list */
 .todaycard{border-radius:16px;overflow:hidden;position:relative;margin-bottom:14px;box-shadow:0 4px 14px rgba(22,50,79,.25);cursor:pointer}
@@ -129,6 +137,7 @@ a{color:var(--blue)}
   <div id="v-map" class="view"></div>
   <div id="v-tix" class="view"></div>
   <div id="v-planb" class="view"></div>
+  <div id="v-wp" class="view"></div>
   <div id="v-info" class="view"></div>
 </div>
 
@@ -136,6 +145,7 @@ a{color:var(--blue)}
 
 <nav class="tabs">
   <button data-v="days" class="on"><span class="ic">📅</span>Dni</button>
+  <button data-v="wp"><span class="ic">⛅</span>Počasie</button>
   <button data-v="map"><span class="ic">🗺️</span>Mapa</button>
   <button data-v="tix"><span class="ic">🎫</span>Lístky</button>
   <button data-v="planb"><span class="ic">🆘</span>Plán B</button>
@@ -425,6 +435,69 @@ const YR=["Berlin","Billund","Søndervig","Klitmøller","Kristiansand",
 "Trollstigen","Ålesund","Averøy","Trondheim","Lillehammer",
 "Oslo","Ystad","Kraków","Bardejov"];
 
+/* ===== WAYPOINTS: každá zastávka chronologicky (kam prídeme / túra / nocľah) ===== */
+/* nm=názov, alt=výška m, t=ikona typu, la/lo=súradnice, nx/nn/ni=júl priemer max/min/ikona, yr=Yr hľadanie */
+const WP=[
+{d:"pi 3.7.",iso:"2026-07-03",nm:"Košice — štart",alt:210,t:"🚗",la:48.72,lo:21.26,nx:26,nn:14,ni:"🌤️",yr:"Košice"},
+{d:"pi 3.7.",iso:"2026-07-03",nm:"Nemecko, diaľnica (nocľah)",alt:40,t:"🌙",la:52.52,lo:13.40,nx:24,nn:14,ni:"🌤️",yr:"Berlin"},
+{d:"so 4.7.",iso:"2026-07-04",nm:"Billund (nocľah pri Legolande)",alt:60,t:"🌙",la:55.73,lo:9.13,nx:21,nn:13,ni:"🌦️",yr:"Billund"},
+{d:"ne 5.7.",iso:"2026-07-05",nm:"Legoland Billund",alt:60,t:"🎫",la:55.73,lo:9.13,nx:21,nn:13,ni:"🌦️",yr:"Billund"},
+{d:"ne 5.7.",iso:"2026-07-05",nm:"Duny Søndervig (nocľah)",alt:5,t:"🌙",la:56.13,lo:8.13,nx:19,nn:13,ni:"🌦️",yr:"Søndervig"},
+{d:"po 6.7.",iso:"2026-07-06",nm:"Hvide Sande (bicykle, pláž)",alt:5,t:"🚴",la:56.00,lo:8.13,nx:19,nn:13,ni:"🌦️",yr:"Hvide Sande"},
+{d:"po 6.7.",iso:"2026-07-06",nm:"Klitmøller / Thy (nocľah)",alt:10,t:"🌙",la:57.02,lo:8.48,nx:19,nn:12,ni:"🌦️",yr:"Klitmøller"},
+{d:"ut 7.7.",iso:"2026-07-07",nm:"Skagen — Grenen (stret morí)",alt:5,t:"🚶",la:57.74,lo:10.64,nx:19,nn:13,ni:"🌤️",yr:"Skagen"},
+{d:"ut 7.7.",iso:"2026-07-07",nm:"Hirtshals → trajekt",alt:10,t:"⛴",la:57.59,lo:9.96,nx:19,nn:13,ni:"🌦️",yr:"Hirtshals"},
+{d:"ut 7.7.",iso:"2026-07-07",nm:"Pri Kristiansande (nocľah)",alt:50,t:"🌙",la:58.10,lo:7.80,nx:21,nn:13,ni:"🌤️",yr:"Kristiansand"},
+{d:"st 8.7.",iso:"2026-07-08",nm:"Lysebotn (fjord)",alt:10,t:"🚗",la:59.05,lo:6.66,nx:19,nn:11,ni:"🌦️",yr:"Lysebotn"},
+{d:"st 8.7.",iso:"2026-07-08",nm:"Øygardstøl — plató (nocľah)",alt:640,t:"🌙",la:59.02,lo:6.66,nx:16,nn:8,ni:"🌦️",yr:"Øygardstøl"},
+{d:"št 9.7.",iso:"2026-07-09",nm:"KJERAG — túra (balvan)",alt:1020,t:"🥾",la:59.03,lo:6.59,nx:12,nn:4,ni:"🌧️",yr:"Kjerag"},
+{d:"št 9.7.",iso:"2026-07-09",nm:"Øygardstøl (nocľah)",alt:640,t:"🌙",la:59.02,lo:6.66,nx:16,nn:8,ni:"🌦️",yr:"Øygardstøl"},
+{d:"pi 10.7.",iso:"2026-07-10",nm:"Plavba Lysefjordom ⛴",alt:0,t:"⛴",la:59.00,lo:6.40,nx:18,nn:11,ni:"🌦️",yr:"Lysefjorden"},
+{d:"pi 10.7.",iso:"2026-07-10",nm:"Preikestolen — parkovisko (nocľah)",alt:270,t:"🌙",la:58.99,lo:6.14,nx:18,nn:11,ni:"🌦️",yr:"Preikestolen"},
+{d:"so 11.7.",iso:"2026-07-11",nm:"PREIKESTOLEN — túra",alt:604,t:"🥾",la:58.99,lo:6.19,nx:16,nn:9,ni:"🌦️",yr:"Preikestolen"},
+{d:"so 11.7.",iso:"2026-07-11",nm:"Suldalsvatnet (nocľah)",alt:70,t:"🌙",la:59.49,lo:6.78,nx:19,nn:11,ni:"🌦️",yr:"Suldal"},
+{d:"ne 12.7.",iso:"2026-07-12",nm:"Vodopád Låtefossen",alt:120,t:"🚗",la:59.96,lo:6.58,nx:19,nn:11,ni:"🌦️",yr:"Låtefossen"},
+{d:"ne 12.7.",iso:"2026-07-12",nm:"Kinsarvik (Hardanger, nocľah)",alt:10,t:"🌙",la:60.38,lo:6.72,nx:21,nn:12,ni:"🌤️",yr:"Kinsarvik"},
+{d:"po 13.7.",iso:"2026-07-13",nm:"Husedalen — túra 4 vodopády",alt:600,t:"🥾",la:60.39,lo:6.78,nx:18,nn:10,ni:"🌦️",yr:"Kinsarvik"},
+{d:"po 13.7.",iso:"2026-07-13",nm:"Kinsarvik (nocľah)",alt:10,t:"🌙",la:60.38,lo:6.72,nx:21,nn:12,ni:"🌤️",yr:"Kinsarvik"},
+{d:"ut 14.7.",iso:"2026-07-14",nm:"Vøringsfossen / Eidfjord",alt:820,t:"🚗",la:60.43,lo:7.25,nx:15,nn:7,ni:"🌦️",yr:"Vøringsfossen"},
+{d:"ut 14.7.",iso:"2026-07-14",nm:"Voss (nocľah)",alt:60,t:"🌙",la:60.63,lo:6.42,nx:20,nn:11,ni:"🌦️",yr:"Voss"},
+{d:"st 15.7.",iso:"2026-07-15",nm:"Voss — rafting",alt:60,t:"🛶",la:60.65,lo:6.49,nx:20,nn:11,ni:"🌦️",yr:"Voss"},
+{d:"st 15.7.",iso:"2026-07-15",nm:"Bergen (nocľah)",alt:10,t:"🌙",la:60.39,lo:5.32,nx:18,nn:12,ni:"🌧️",yr:"Bergen"},
+{d:"št 16.7.",iso:"2026-07-16",nm:"Bergen — mesto, Fløyen",alt:320,t:"🏘",la:60.39,lo:5.32,nx:18,nn:12,ni:"🌧️",yr:"Bergen"},
+{d:"pi 17.7.",iso:"2026-07-17",nm:"Stegastein (vyhliadka)",alt:650,t:"🚗",la:60.91,lo:7.20,nx:16,nn:8,ni:"🌦️",yr:"Aurland"},
+{d:"pi 17.7.",iso:"2026-07-17",nm:"Borgund (stavkirke)",alt:300,t:"⛪",la:61.05,lo:7.81,nx:19,nn:10,ni:"🌦️",yr:"Borgund"},
+{d:"pi 17.7.",iso:"2026-07-17",nm:"Lærdal (nocľah)",alt:10,t:"🌙",la:61.10,lo:7.48,nx:21,nn:11,ni:"🌤️",yr:"Lærdal"},
+{d:"so 18.7.",iso:"2026-07-18",nm:"Urnes / Solvorn (stavkirke)",alt:10,t:"⛪",la:61.29,lo:7.32,nx:20,nn:11,ni:"🌤️",yr:"Solvorn"},
+{d:"so 18.7.",iso:"2026-07-18",nm:"Jostedalen (nocľah)",alt:300,t:"🌙",la:61.57,lo:7.27,nx:19,nn:10,ni:"🌦️",yr:"Jostedal"},
+{d:"ne 19.7.",iso:"2026-07-19",nm:"NIGARDSBREEN — ľadovec",alt:300,t:"🧊",la:61.68,lo:7.22,nx:18,nn:9,ni:"🌦️",yr:"Nigardsbreen"},
+{d:"ne 19.7.",iso:"2026-07-19",nm:"Jostedalen (nocľah)",alt:300,t:"🌙",la:61.57,lo:7.27,nx:19,nn:10,ni:"🌦️",yr:"Jostedal"},
+{d:"po 20.7.",iso:"2026-07-20",nm:"Sognefjellet — najvyššia cesta",alt:1430,t:"🏔",la:61.57,lo:7.95,nx:11,nn:3,ni:"🌦️",yr:"Sognefjellet"},
+{d:"po 20.7.",iso:"2026-07-20",nm:"Lom (stavkirke, pekáreň)",alt:380,t:"🚗",la:61.84,lo:8.57,nx:21,nn:10,ni:"🌤️",yr:"Lom"},
+{d:"po 20.7.",iso:"2026-07-20",nm:"Juvasshytta 1850 m (nocľah)",alt:1850,t:"🌙",la:61.66,lo:8.36,nx:8,nn:1,ni:"🌨️",yr:"Juvasshytta"},
+{d:"ut 21.7.",iso:"2026-07-21",nm:"GALDHØPIGGEN — vrchol",alt:2469,t:"⛰",la:61.64,lo:8.31,nx:2,nn:-3,ni:"🌨️",yr:"Galdhøpiggen"},
+{d:"ut 21.7.",iso:"2026-07-21",nm:"Bøverdalen (nocľah)",alt:700,t:"🌙",la:61.75,lo:8.35,nx:18,nn:8,ni:"🌦️",yr:"Bøverdalen"},
+{d:"st 22.7.",iso:"2026-07-22",nm:"Dalsnibba — Skywalk",alt:1500,t:"🌊",la:62.04,lo:7.27,nx:9,nn:2,ni:"🌦️",yr:"Dalsnibba"},
+{d:"st 22.7.",iso:"2026-07-22",nm:"Geiranger — fjord cruise (nocľah)",alt:10,t:"🛥",la:62.10,lo:7.21,nx:18,nn:10,ni:"🌦️",yr:"Geiranger"},
+{d:"št 23.7.",iso:"2026-07-23",nm:"Trollstigen — cesta trolov",alt:700,t:"🛣",la:62.46,lo:7.66,nx:14,nn:6,ni:"🌦️",yr:"Trollstigen"},
+{d:"št 23.7.",iso:"2026-07-23",nm:"Trollveggen / Åndalsnes (nocľah)",alt:20,t:"🌙",la:62.55,lo:7.69,nx:19,nn:11,ni:"🌦️",yr:"Åndalsnes"},
+{d:"pi 24.7.",iso:"2026-07-24",nm:"Rampestreken (vyhliadka)",alt:540,t:"🥾",la:62.57,lo:7.69,nx:16,nn:9,ni:"🌦️",yr:"Åndalsnes"},
+{d:"pi 24.7.",iso:"2026-07-24",nm:"Ålesund (nocľah)",alt:10,t:"🌙",la:62.47,lo:6.15,nx:17,nn:12,ni:"🌧️",yr:"Ålesund"},
+{d:"so 25.7.",iso:"2026-07-25",nm:"Atlantic Road / Averøy (nocľah)",alt:5,t:"🌉",la:63.01,lo:7.35,nx:17,nn:11,ni:"🌦️",yr:"Averøy"},
+{d:"ne 26.7.",iso:"2026-07-26",nm:"Trondheim — Nidaros (nocľah)",alt:15,t:"🏘",la:63.43,lo:10.39,nx:19,nn:12,ni:"🌤️",yr:"Trondheim"},
+{d:"po 27.7.",iso:"2026-07-27",nm:"Dovrefjell — Snøhetta",alt:1200,t:"🚗",la:62.30,lo:9.55,nx:12,nn:4,ni:"🌦️",yr:"Hjerkinn"},
+{d:"po 27.7.",iso:"2026-07-27",nm:"Hunderfossen / Lillehammer (nocľah)",alt:200,t:"🌙",la:61.23,lo:10.40,nx:21,nn:11,ni:"🌤️",yr:"Lillehammer"},
+{d:"ut 28.7.",iso:"2026-07-28",nm:"Lillehammer — olympia",alt:180,t:"🎿",la:61.12,lo:10.46,nx:22,nn:11,ni:"🌤️",yr:"Lillehammer"},
+{d:"ut 28.7.",iso:"2026-07-28",nm:"Oslo (nocľah)",alt:15,t:"🌙",la:59.91,lo:10.75,nx:23,nn:13,ni:"🌤️",yr:"Oslo"},
+{d:"st 29.7.",iso:"2026-07-29",nm:"Oslo — mesto",alt:15,t:"🏛",la:59.91,lo:10.75,nx:23,nn:13,ni:"🌤️",yr:"Oslo"},
+{d:"st 29.7.",iso:"2026-07-29",nm:"Ystad → nočný trajekt",alt:10,t:"⛴",la:55.43,lo:13.82,nx:21,nn:14,ni:"🌤️",yr:"Ystad"},
+{d:"št 30.7.",iso:"2026-07-30",nm:"Vroclav (obed)",alt:120,t:"🚗",la:51.11,lo:17.03,nx:24,nn:14,ni:"🌤️",yr:"Wrocław"},
+{d:"št 30.7.",iso:"2026-07-30",nm:"Krakov (posledná noc v karavane)",alt:210,t:"🌙",la:50.06,lo:19.94,nx:24,nn:14,ni:"🌤️",yr:"Kraków"},
+{d:"pi 31.7.",iso:"2026-07-31",nm:"Bardejov — odovzdanie → domov",alt:270,t:"🏁",la:49.29,lo:21.27,nx:24,nn:13,ni:"🌤️",yr:"Bardejov"}
+];
+let wwxCache=LS("wwx"); let WWX=(wwxCache&&wwxCache.d)?wwxCache.d:{};
+function offIso(iso){const t=new Date();t.setHours(0,0,0,0);return Math.round((new Date(iso+"T00:00:00")-t)/86400000);}
+
 function wxIcon(c){
   if(c===0)return"☀️"; if([1,2].includes(c))return"🌤️"; if(c===3)return"☁️";
   if([45,48].includes(c))return"🌫️"; if([51,53,55,56,57].includes(c))return"🌦️";
@@ -454,6 +527,16 @@ function loadWeather(){
     });
     WX=nw; wxTime=Date.now(); SAVE("wx",{t:wxTime,d:WX});
     renderDays(); if(cur>=0)openDay(cur);
+  }).catch(()=>{});
+  // waypoints
+  const wla=WP.map(p=>p.la).join(","), wlo=WP.map(p=>p.lo).join(",");
+  const wurl=`https://api.open-meteo.com/v1/forecast?latitude=${wla}&longitude=${wlo}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto&forecast_days=16`;
+  fetch(wurl).then(r=>r.json()).then(arr=>{
+    if(!Array.isArray(arr))arr=[arr];
+    const nw={};
+    arr.forEach((loc,i)=>{ if(!loc.daily)return; const idx=loc.daily.time.indexOf(WP[i].iso);
+      if(idx>=0)nw[i]={code:loc.daily.weather_code[idx],tmax:Math.round(loc.daily.temperature_2m_max[idx]),tmin:Math.round(loc.daily.temperature_2m_min[idx]),rain:Math.round(loc.daily.precipitation_sum[idx])};});
+    WWX=nw; SAVE("wwx",{t:Date.now(),d:WWX}); renderWp();
   }).catch(()=>{});
 }
 
@@ -607,6 +690,28 @@ function renderPlanB(){
   <li>Mešká sa všade ľahko — pozri kotvy hore a volaj hneď, čo sa dá posunúť</li></ul></div>`;
 }
 
+/* ============ RENDER: POČASIE / BODY ============ */
+function wpWeatherCell(i){
+  const wp=WP[i], w=WWX[i], off=offIso(wp.iso);
+  if(w){const tr=off>7?"~":"";const c=off<=7?"var(--blue)":"#3f7fb0";
+    return `<span style="color:${c};font-weight:700">${wxIcon(w.code)} ${tr}${w.tmax}°/${w.tmin}°${w.rain>=1?" 💧":""}</span>`;}
+  return `<span style="color:var(--muted)">${wp.ni} ~${wp.nx}°/${wp.nn}° <span style="font-size:9px">ø júl</span></span>`;
+}
+function renderWp(){
+  let h=`<h2 class="vt">Počasie po trase</h2><p class="lead">Všetky zastávky chronologicky — kam prídeme, túra, nocľah. Výška ovplyvňuje teplotu (vrchol vs dolina zvlášť). Modrá = predpoveď (0–7 dní) · svetlomodrá ~ = trend (8–16) · sivá ø = júlový priemer.</p>`;
+  let lastd="";
+  WP.forEach((wp,i)=>{
+    if(wp.d!==lastd){lastd=wp.d;h+=`<div class="wpday">${wp.d}</div>`;}
+    h+=`<div class="wprow">
+      <div class="wpic">${wp.t}</div>
+      <div class="wptx"><div class="wpnm">${wp.nm}</div>
+        <div class="wpalt">⛰ ${wp.alt} m &nbsp;·&nbsp; <a href="https://www.yr.no/en/search?q=${encodeURIComponent(wp.yr)}" target="_blank">Yr ↗</a></div></div>
+      <div class="wpw">${wpWeatherCell(i)}</div>
+    </div>`;
+  });
+  document.getElementById("v-wp").innerHTML=h;
+}
+
 /* ============ RENDER: INFO ============ */
 const PACKLIST=[
 "## 💊 Lekárnička",
@@ -704,7 +809,7 @@ document.querySelectorAll("nav.tabs button").forEach(b=>{
   });
 });
 
-renderDays();renderMap();renderTix();renderPlanB();renderInfo();loadWeather();
+renderDays();renderWp();renderMap();renderTix();renderPlanB();renderInfo();loadWeather();
 const ti=todayIdx(); if(ti>=0) setTimeout(()=>openDay(ti),400);
 
 /* offline */
