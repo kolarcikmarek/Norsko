@@ -35,7 +35,11 @@ nav.tabs button .ic{display:block;font-size:18px;margin-bottom:1px}
 .wpnm{font-size:14px;color:var(--navy);font-weight:600;line-height:1.25}
 .wpalt{font-size:11.5px;color:var(--muted)}
 .wpalt a{color:var(--blue);text-decoration:none;font-weight:700}
-.wpw{flex:none;text-align:right;font-size:13.5px;white-space:nowrap}
+.wpw{flex:none;text-align:right;font-size:13px;white-space:nowrap;min-width:78px}
+.yrbtn{flex:none;display:flex;align-items:center;gap:2px;text-decoration:none;background:linear-gradient(135deg,#1f7fc4,#0c5d97);color:#fff;border-radius:9px;padding:6px 9px;margin-left:4px;box-shadow:0 1px 3px rgba(12,93,151,.35)}
+.yrbtn .yrlogo{font-weight:800;font-size:14px;letter-spacing:.5px;font-style:italic}
+.yrbtn .yrsun{font-size:11px;margin-top:-6px;margin-left:-1px}
+.yrbtn:active{transform:scale(.95)}
 nav.tabs button.on{color:var(--blue);font-weight:700}
 /* day list */
 .todaycard{border-radius:16px;overflow:hidden;position:relative;margin-bottom:14px;box-shadow:0 4px 14px rgba(22,50,79,.25);cursor:pointer}
@@ -100,6 +104,8 @@ border-radius:10px;padding:11px;margin:7px 0;font-weight:600;font-size:14.5px}
 .tix h4{margin:2px 0 4px;font-size:15.5px;color:var(--navy)}
 .tix .ref{font-size:12.5px;color:var(--muted)}
 .tix .note{font-size:13.5px;margin-top:6px}
+.pdfbtn{display:inline-block;margin-top:9px;background:#fff;border:1.5px solid var(--blue);color:var(--blue);text-decoration:none;border-radius:9px;padding:8px 14px;font-weight:700;font-size:13.5px}
+.pdfbtn:active{background:var(--ice)}
 .infocard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 16px 12px;margin:10px 0}
 .infocard h3{font-size:15.5px;color:var(--navy);margin:12px 0 6px}
 .infocard ul{margin:4px 0;padding-left:18px;font-size:14px}
@@ -128,7 +134,7 @@ a{color:var(--blue)}
 <body>
 
 <header class="top">
-  <div><h1>NÓRSKO 2026</h1><div class="sub">3.–31. júl · Marek · Denisa · Leo · Bürstner PO282IN</div></div>
+  <div><h1>NÓRSKO 2026</h1><div class="sub">Rodinná výprava karavanom · 3.–31. júl 2026</div></div>
   <div style="font-size:26px">🚐</div>
 </header>
 
@@ -371,14 +377,14 @@ nav:[{t:"Krakov → Bardejov",u:"https://www.google.com/maps/dir/Kraków/Bardejo
 
 /* ============ TICKETS ============ */
 const TIX=[
-{w:"ne 5.7.",t:"Legoland Billund — 3× vstup + 2× Bronze Fastrack",r:"obj. 605090076",note:"Lístky v LEGOLAND appke. Fastrack neprenosný, skipy platia len 5.7."},
-{w:"ut 7.7. · 20:45",t:"⛴ Hirtshals → Kristiansand · Color Line SuperSpeed 1",r:"WKV6879",note:"Check-in do 19:45, doklady všetci. V cene večerný bufet ×3 + prednostné vylodenie. Príchod 23:59."},
-{w:"pi 10.7. · 12:55",t:"⛴ Lysebotn → Lauvvik (Lysefjord)",r:"Kolumbus 5323509360",note:"Na móle najneskôr 12:35! Príchod 15:35. Lístok v mobile."},
-{w:"st 15.7. · 9:30",t:"🛶 Family rafting Vosso · Voss Active",r:"34812",note:"Zraz ~9:00, Nedkvitnesvegen 25, Skulestadmo. Plavky + uterák."},
-{w:"ne 19.7. · 12:30",t:"🧊 Nigardsbreen Short Blue Ice Hike (do 17:00)",r:"bfl.no 354849621",note:"Zraz 12:00 pri depe GUIDE. Celé telo zakryté, rukavice, desiata, pevná obuv."},
-{w:"ut 21.7. · 10:00",t:"⛰ Galdhøpiggen s vodcom z Juvasshytty",r:"DL54KO61BC",note:"Zraz 9:30. Nerefundovateľné. + mýto cesty na mieste."},
-{w:"st 22.7. · 12:30",t:"🛥 Tichá fjord cruise Geiranger (do 14:30)",r:"638142",note:"Nástup do 12:15, HurtigBoatkai za turistickou informáciou. Audio cez appku."},
-{w:"st 29.7. · 22:45",t:"⛴ Ystad → Świnoujście · M/F Polonia · kajuta 363",r:"POLSCA IT0027107",note:"Check-in do 20:45 (120 min povinných)! Doklady všetci. Z Osla odísť do 13:00."}
+{w:"ne 5.7.",t:"Legoland Billund — 3× vstup + 2× Bronze Fastrack",r:"obj. 605090076",pdf:"1fSrXJzWZyVT9AGN4nKZmzYZ3qy17Sx1w",note:"Lístky v LEGOLAND appke. Fastrack neprenosný, skipy platia len 5.7."},
+{w:"ut 7.7. · 20:45",t:"⛴ Hirtshals → Kristiansand · Color Line SuperSpeed 1",r:"WKV6879",pdf:"1BEzhMlook6jXGtl99vUrTFoxIVoCS4DQ",note:"Check-in do 19:45, doklady všetci. V cene večerný bufet ×3 + prednostné vylodenie. Príchod 23:59."},
+{w:"pi 10.7. · 12:55",t:"⛴ Lysebotn → Lauvvik (Lysefjord)",r:"Kolumbus 5323509360",pdf:"1ObVAqCRvNCgcMfe_K9GvrUOQcJ9GdFL3",note:"Na móle najneskôr 12:35! Príchod 15:35. Lístok v mobile."},
+{w:"st 15.7. · 9:30",t:"🛶 Family rafting Vosso · Voss Active",r:"34812",pdf:"1mdQHFEdaq1L64XXuQhR6-3OvvcT316-B",note:"Zraz ~9:00, Nedkvitnesvegen 25, Skulestadmo. Plavky + uterák."},
+{w:"ne 19.7. · 12:30",t:"🧊 Nigardsbreen Short Blue Ice Hike (do 17:00)",r:"bfl.no 354849621",pdf:"1hlt7ArAUF-DHMh3k97Fu-uuCcplZe8OE",note:"Zraz 12:00 pri depe GUIDE. Celé telo zakryté, rukavice, desiata, pevná obuv."},
+{w:"ut 21.7. · 10:00",t:"⛰ Galdhøpiggen s vodcom z Juvasshytty",r:"DL54KO61BC",pdf:"1vALVdUXG0qjh5em0NvWrnFYfHjc0dUU-",note:"Zraz 9:30. Nerefundovateľné. + mýto cesty na mieste."},
+{w:"st 22.7. · 12:30",t:"🛥 Tichá fjord cruise Geiranger (do 14:30)",r:"638142",pdf:"1gZeInQFi_hrIL2ddtQor-OYPWbYgxO7C",note:"Nástup do 12:15, HurtigBoatkai za turistickou informáciou. Audio cez appku."},
+{w:"st 29.7. · 22:45",t:"⛴ Ystad → Świnoujście · M/F Polonia · kajuta 363",r:"POLSCA IT0027107",pdf:"1WHy-8nSkDpr08c1o298DmEi_DTV2ebeg",note:"Check-in do 20:45 (120 min povinných)! Doklady všetci. Z Osla odísť do 13:00."}
 ];
 
 /* ============ CONTACTS ============ */
@@ -627,6 +633,14 @@ function renderMap(){
   <p class="lead">Ťukni na červený bod — otvorí sa daný deň. Číslo = deň výpravy.</p>
   <div class="mapbox"><svg viewBox="0 0 760 620" xmlns="http://www.w3.org/2000/svg">
   <rect width="760" height="620" fill="#dcebf5"/>
+  <g fill="none" stroke="#6f93aa" stroke-width="1.3" stroke-dasharray="5 4" opacity="0.55">
+    <path d="M250,14 C255,90 258,150 292,210 C302,255 302,285 300,308"/>
+    <path d="M108,228 L250,236"/>
+    <path d="M252,236 C268,262 286,286 300,308"/>
+    <path d="M120,336 L336,342"/>
+    <path d="M360,345 C373,392 383,432 393,472"/>
+    <path d="M560,468 L594,562"/>
+  </g>
   <g fill="none" stroke="#c8402f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".85">
     <path d="M615,557 L569,509 L466,471 L336,420 L215,383 L182,305 L145,292 L160,260 L235,233 L213,238"/>
     <path d="M213,238 L143,218" stroke-dasharray="7 5"/>
@@ -636,8 +650,9 @@ function renderMap(){
     <path d="M366,370 L462,425 L466,471 L536,502 L615,557"/>
   </g>
   <g font-family="Arial" font-size="12" fill="#5c6f80" font-style="italic">
-    <text x="120" y="165">NÓRSKO</text><text x="290" y="260">ŠVÉDSKO</text>
-    <text x="150" y="300">DÁNSKO</text><text x="330" y="450">POĽSKO</text><text x="200" y="420">NEMECKO</text>
+    <text x="95" y="120">NÓRSKO</text><text x="300" y="245">ŠVÉDSKO</text>
+    <text x="150" y="295">DÁNSKO</text><text x="468" y="440">POĽSKO</text><text x="205" y="415">NEMECKO</text>
+    <text x="585" y="600">SLOVENSKO</text>
   </g>${pins}</svg></div>
   <div class="navbtns" style="margin-top:12px">
     <a href="https://www.google.com/maps/dir/Košice/Billund/Kristiansand/Preikestolen/Kinsarvik/Bergen/Gaupne/Lom/Geiranger/Åndalsnes" target="_blank">📍 Celá trasa v Google Maps (1. polovica)</a>
@@ -647,10 +662,10 @@ function renderMap(){
 
 /* ============ RENDER: TICKETS ============ */
 function renderTix(){
-  let h=`<h2 class="vt">Lístky a rezervácie</h2><p class="lead">Všetko kúpené ✅ — PDF lístky sú na Drive v priečinku „norsko / rezervacie a listky" (stiahnuté offline v mobile + 1 papierová sada v karavane).</p>`;
-  TIX.forEach(t=>{h+=`<div class="tix"><div class="when">${t.w}</div><h4>${t.t}</h4><div class="ref">Rezervácia: <b>${t.r}</b></div><div class="note">${t.note}</div></div>`;});
+  let h=`<h2 class="vt">Lístky a rezervácie</h2><p class="lead">Všetko kúpené ✅. Tlačidlo <b>📄 Otvoriť lístok</b> otvorí PDF z Google Drive — funguje len pre prihlásené účty s prístupom (Ty, prípadne s kým priečinok zdieľaš); cudzí s odkazom na appku ho neotvoria. Maj v mobile appku Google Drive a priečinok offline.</p>`;
+  TIX.forEach(t=>{h+=`<div class="tix"><div class="when">${t.w}</div><h4>${t.t}</h4><div class="ref">Rezervácia: <b>${t.r}</b></div><div class="note">${t.note}</div>${t.pdf?`<a class="pdfbtn" href="https://drive.google.com/file/d/${t.pdf}/view" target="_blank">📄 Otvoriť lístok (PDF)</a>`:''}</div>`;});
   h+=`<div class="infocard"><h3>✅ Vybavená administratíva</h3><ul>
-  <li><b>Epass24</b> — PO282IN + karta → nórske mýto sa platí samo</li>
+  <li><b>Epass24</b> — ŠPZ karavanu + karta → nórske mýto sa platí samo</li>
   <li><b>AutoPASS ferjekonto</b> — záloha 2 200 NOK zaplatená → 50 % zľava na fjordové trajekty (kamera číta ŠPZ). Po návrate refund zostatku + zrušiť registrácie</li>
   <li><b>Revolut Premium</b> — cestovné poistenie + kurzy NOK/DKK/PLN</li>
   <li><b>Park4Night Pro</b> — offline mapy spotov</li></ul></div>`;
@@ -698,15 +713,16 @@ function wpWeatherCell(i){
   return `<span style="color:var(--muted)">${wp.ni} ~${wp.nx}°/${wp.nn}° <span style="font-size:9px">ø júl</span></span>`;
 }
 function renderWp(){
-  let h=`<h2 class="vt">Počasie po trase</h2><p class="lead">Všetky zastávky chronologicky — kam prídeme, túra, nocľah. Výška ovplyvňuje teplotu (vrchol vs dolina zvlášť). Modrá = predpoveď (0–7 dní) · svetlomodrá ~ = trend (8–16) · sivá ø = júlový priemer.</p>`;
+  let h=`<h2 class="vt">Počasie po trase</h2><p class="lead">Všetky zastávky chronologicky — kam prídeme, túra, nocľah. Výška ovplyvňuje teplotu (vrchol vs dolina zvlášť). Modrá = predpoveď (0–7 dní) · svetlomodrá ~ = trend (8–16) · sivá ø = júlový priemer. Tlačidlo <b>Yr</b> vpravo otvorí detailnú predpoveď (ak máš appku Yr v telefóne, otvorí sa v nej).</p>`;
   let lastd="";
   WP.forEach((wp,i)=>{
     if(wp.d!==lastd){lastd=wp.d;h+=`<div class="wpday">${wp.d}</div>`;}
     h+=`<div class="wprow">
       <div class="wpic">${wp.t}</div>
       <div class="wptx"><div class="wpnm">${wp.nm}</div>
-        <div class="wpalt">⛰ ${wp.alt} m &nbsp;·&nbsp; <a href="https://www.yr.no/en/search?q=${encodeURIComponent(wp.yr)}" target="_blank">Yr ↗</a></div></div>
+        <div class="wpalt">⛰ ${wp.alt} m</div></div>
       <div class="wpw">${wpWeatherCell(i)}</div>
+      <a class="yrbtn" href="https://www.yr.no/en/search?q=${encodeURIComponent(wp.yr)}" target="_blank" title="Yr predpoveď: ${wp.nm}"><span class="yrlogo">Yr</span><span class="yrsun">☀</span></a>
     </div>`;
   });
   document.getElementById("v-wp").innerHTML=h;
@@ -794,7 +810,7 @@ function renderInfo(){
   <div class="infocard"><h3>🧳 Balenie — odklikávaj</h3><ul class="cl">${pl}</ul></div>
 
   <div class="infocard" style="text-align:center;color:var(--muted);font-size:12.5px;border:none;background:none">
-  Nórsko 2026 · Marek · Denisa · Leo · Bürstner Lyseo 690G (PO282IN)<br>fotky: Wikimedia Commons (CC)</div>`;
+  Nórsko 2026 · Bürstner Lyseo 690G · fotky: Wikimedia Commons (CC)</div>`;
 }
 function togPack(i,el){pack[i]=!pack[i];SAVE("pack",pack);el.classList.toggle("done");}
 
