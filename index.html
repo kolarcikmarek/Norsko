@@ -417,6 +417,14 @@ function dayOffset(i){
   return Math.round((new Date(DAYS[i].iso+"T00:00:00")-t)/86400000);
 }
 
+/* presné miesto pre Yr predpoveď (pri túrach = vrchol, nie dolina) */
+const YR=["Berlin","Billund","Søndervig","Klitmøller","Kristiansand",
+"Lysebotn","Kjerag","Preikestolen","Jørpeland","Kinsarvik",
+"Kinsarvik","Voss","Voss","Bergen","Aurland",
+"Jostedal","Nigardsbreen","Juvasshytta","Galdhøpiggen","Geiranger",
+"Trollstigen","Ålesund","Averøy","Trondheim","Lillehammer",
+"Oslo","Ystad","Kraków","Bardejov"];
+
 function wxIcon(c){
   if(c===0)return"☀️"; if([1,2].includes(c))return"🌤️"; if(c===3)return"☁️";
   if([45,48].includes(c))return"🌫️"; if([51,53,55,56,57].includes(c))return"🌦️";
@@ -512,6 +520,7 @@ function openDay(i){
   if(d.late) h+=`<div class="box late">⏱ <b>Ak meškáte:</b> ${d.late}</div>`;
   (d.tips||[]).forEach(t=>{h+=`<div class="box tip">💡 ${t}</div>`;});
   if(d.nav&&d.nav.length){h+=`<div class="navbtns">`;d.nav.forEach((n,j)=>{h+=`<a href="${n.u}" target="_blank" class="${j?"sec2":""}">📍 ${n.t}</a>`;});h+=`</div>`;}
+  if(YR[i])h+=`<div class="navbtns"><a href="https://www.yr.no/en/search?q=${encodeURIComponent(YR[i])}" target="_blank" class="sec2">⛅ Yr predpoveď: ${YR[i]}</a></div>`;
   if(d.photos&&d.photos.length){h+=`<div class="sec"><h5>Viac fotiek</h5><div class="gallery">`;d.photos.forEach(p=>h+=`<img src="${p}" loading="lazy">`);h+=`</div></div>`;}
   h+=`<div class="prevnext">
     <button ${i===0?"disabled":""} onclick="openDay(${i-1})">‹ ${i>0?DAYS[i-1].d:""}</button>
