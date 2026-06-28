@@ -392,6 +392,62 @@ const CONTACTS=[
 const LS=k=>{try{return JSON.parse(localStorage.getItem(k)||"{}")}catch(e){return{}}};
 const SAVE=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 let done=LS("done"), pack=LS("pack");
+let wxCache=LS("wx"); let WX=(wxCache&&wxCache.d)?wxCache.d:{}; let wxTime=(wxCache&&wxCache.t)?wxCache.t:0;
+
+/* súradnice nocľahu/miesta pre každý deň (poradie = DAYS) */
+const COORDS=[
+[52.52,13.40],[55.73,9.13],[55.73,9.13],[56.50,8.24],[58.10,7.80],
+[59.02,6.66],[59.02,6.66],[58.99,6.14],[59.49,6.78],[60.38,6.72],
+[60.38,6.72],[60.63,6.42],[60.39,5.32],[60.39,5.32],[61.10,7.48],
+[61.57,7.27],[61.68,7.22],[61.66,8.36],[61.75,8.35],[62.10,7.21],
+[62.50,7.77],[62.47,6.15],[63.01,7.35],[63.43,10.39],[61.23,10.40],
+[59.91,10.75],[55.43,13.82],[50.06,19.94],[49.29,21.27]];
+
+/* júlové priemery (orientačne, beyond 16-day window): [tmax,tmin,ikona] */
+const NORM=[
+[24,14,"🌤️"],[21,13,"🌦️"],[21,13,"🌦️"],[19,13,"🌦️"],[21,13,"🌤️"],
+[15,7,"🌦️"],[15,7,"🌦️"],[18,11,"🌦️"],[19,11,"🌦️"],[21,12,"🌤️"],
+[21,12,"🌤️"],[20,11,"🌦️"],[18,12,"🌧️"],[18,12,"🌧️"],[21,11,"🌤️"],
+[19,10,"🌦️"],[18,9,"🌦️"],[8,2,"🌨️"],[17,8,"🌦️"],[19,11,"🌦️"],
+[19,11,"🌦️"],[17,12,"🌧️"],[17,11,"🌦️"],[19,12,"🌤️"],[21,11,"🌤️"],
+[23,13,"🌤️"],[21,14,"🌤️"],[24,14,"🌤️"],[24,13,"🌤️"]];
+
+function dayOffset(i){
+  const t=new Date(); t.setHours(0,0,0,0);
+  return Math.round((new Date(DAYS[i].iso+"T00:00:00")-t)/86400000);
+}
+
+function wxIcon(c){
+  if(c===0)return"☀️"; if([1,2].includes(c))return"🌤️"; if(c===3)return"☁️";
+  if([45,48].includes(c))return"🌫️"; if([51,53,55,56,57].includes(c))return"🌦️";
+  if([61,63,65,66,67,80,81,82].includes(c))return"🌧️";
+  if([71,73,75,77,85,86].includes(c))return"🌨️";
+  if([95,96,99].includes(c))return"⛈️"; return"🌡️";
+}
+function wxStr(i){
+  const w=WX[i], off=dayOffset(i);
+  if(w){ // máme predpoveď (do 16 dní)
+    const tr=off>7?"~":""; // 8–16 dní = trend
+    return ` · <span style="color:var(--blue);font-weight:700">${wxIcon(w.code)} ${tr}${w.tmax}°/${w.tmin}°${w.rain>=1?" 💧":""}</span>`;
+  }
+  const n=NORM[i]; if(!n)return"";
+  return ` · <span style="color:var(--muted)">${n[2]} ~${n[0]}°/${n[1]}° <span style="font-size:10px">ø júl</span></span>`;
+}
+
+function loadWeather(){
+  const lats=COORDS.map(c=>c[0]).join(","), lons=COORDS.map(c=>c[1]).join(",");
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=auto&forecast_days=16`;
+  fetch(url).then(r=>r.json()).then(arr=>{
+    if(!Array.isArray(arr))arr=[arr];
+    const nw={};
+    arr.forEach((loc,i)=>{
+      if(!loc.daily)return; const idx=loc.daily.time.indexOf(DAYS[i].iso);
+      if(idx>=0)nw[i]={code:loc.daily.weather_code[idx],tmax:Math.round(loc.daily.temperature_2m_max[idx]),tmin:Math.round(loc.daily.temperature_2m_min[idx]),rain:Math.round(loc.daily.precipitation_sum[idx]),wind:Math.round(loc.daily.wind_speed_10m_max[idx])};
+    });
+    WX=nw; wxTime=Date.now(); SAVE("wx",{t:wxTime,d:WX});
+    renderDays(); if(cur>=0)openDay(cur);
+  }).catch(()=>{});
+}
 
 function todayIdx(){
   const t=new Date(); const y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,"0"),d=String(t.getDate()).padStart(2,"0");
@@ -423,9 +479,10 @@ function renderDays(){
       <div class="thumb" style="background-image:url('${d.img||""}')"></div>
       <div class="tx"><div class="dt">${d.d} · DEŇ ${d.n}${i===ti?' · <span style="color:var(--red)">DNES</span>':''}</div>
       <h4>${d.title}</h4>
-      <div class="meta">🚐 ${d.drive}${d.book?' · <b>🎫</b>':''}${d.wild?' · 🌙 divoko':' · ⛺'}</div></div></div>`;
+      <div class="meta">🚐 ${d.drive}${d.book?' · <b>🎫</b>':''}${d.wild?' · 🌙 divoko':' · ⛺'}<span style="color:var(--blue);font-weight:700">${wxStr(i)}</span></div></div></div>`;
   });
-  document.getElementById("v-days").innerHTML=h;
+  let wn=`<div class="lead" style="margin:2px 2px 10px">⛅ Počasie: <b>0–7 dní</b> spoľahlivá predpoveď · <b>8–16 dní</b> trend (~) · <b>ďalej</b> júlový priemer (ø, sivo, orientačne). Živé z Open-Meteo, aktualizuje sa online.${wxTime?' Naposledy: '+new Date(wxTime).toLocaleString("sk-SK",{day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"}):''}</div>`;
+  document.getElementById("v-days").innerHTML=wn+h;
 }
 
 /* ============ RENDER: DETAIL ============ */
@@ -439,6 +496,14 @@ function openDay(i){
     <div class="ov"><div class="d">${d.d} · deň ${d.n}/29 · ${STAGES[d.st]}</div><h2>${d.title}</h2></div>
   </div><div class="dbody">
   <span class="pill">🚐 ${d.drive}</span>${d.book?'<span class="pill green">🎫 rezervované</span>':''}${d.wild?'<span class="pill" style="background:#7b6cb1">🌙 nocľah divoko</span>':''}`;
+  const w=WX[i], off=dayOffset(i);
+  if(w){
+    const lab=off<=7?"predpoveď":"trend (~"+off+" dní, ber s rezervou)";
+    h+=`<div class="box" style="border-color:var(--blue);background:#eef5fb"><b>${wxIcon(w.code)} Počasie:</b> ${w.tmax}° / ${w.tmin}° · 💧 ${w.rain} mm · 💨 ${w.wind} km/h <span style="color:var(--muted);font-size:12px">(${lab})</span></div>`;
+  } else if(NORM[i]){
+    const n=NORM[i];
+    h+=`<div class="box" style="border-color:#b9c6d2;background:#f3f6f9"><b>${n[2]} Júlový priemer:</b> ~${n[0]}° / ${n[1]}° <span style="color:var(--muted);font-size:12px">(orientačne — reálna predpoveď sa zobrazí ~16 dní vopred)</span></div>`;
+  }
   if(d.book) h+=`<div class="box book"><b>${d.book}</b></div>`;
   h+=`<div class="sec"><h5>Program — ťukni a odškrtni</h5><ul class="plan">`;
   d.plan.forEach((p,j)=>{h+=`<li class="${dd[j]?"done":""}" onclick="tog(${d.n},${j},this)">${p}</li>`;});
@@ -630,7 +695,7 @@ document.querySelectorAll("nav.tabs button").forEach(b=>{
   });
 });
 
-renderDays();renderMap();renderTix();renderPlanB();renderInfo();
+renderDays();renderMap();renderTix();renderPlanB();renderInfo();loadWeather();
 const ti=todayIdx(); if(ti>=0) setTimeout(()=>openDay(ti),400);
 
 /* offline */
