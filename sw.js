@@ -1,4 +1,4 @@
-const CACHE = "norsko26-v9";
+const CACHE = "norsko26-v11";
 const SHELL = ["./", "index.html", "manifest.json", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {

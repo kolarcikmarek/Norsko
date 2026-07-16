@@ -92,6 +92,19 @@ border-radius:10px;padding:11px;margin:7px 0;font-weight:600;font-size:14.5px}
 .navbtns a.sec2{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
 .gallery{display:flex;gap:8px;overflow-x:auto;padding:2px 0;-webkit-overflow-scrolling:touch}
 .gallery img{height:130px;border-radius:10px;flex:none}
+.mygallery{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.mgitem{position:relative;aspect-ratio:1/1;border-radius:10px;overflow:hidden;cursor:pointer;background:#e4edf3}
+.mgitem img{width:100%;height:100%;object-fit:cover;display:block}
+.mgitem.mgvideo video{width:100%;height:100%;object-fit:cover;display:block}
+.mgitem .playic{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;background:rgba(0,0,0,.25);text-shadow:0 1px 4px rgba(0,0,0,.6)}
+#lightbox{position:fixed;inset:0;z-index:60;background:rgba(8,14,20,.96);display:none;align-items:center;justify-content:center}
+#lightbox.open{display:flex}
+.lb-media{max-width:94vw;max-height:88vh;display:flex;flex-direction:column;align-items:center}
+.lb-media img,.lb-media video{max-width:94vw;max-height:80vh;border-radius:8px;object-fit:contain}
+.lb-cap{color:#fff;font-size:13px;margin-top:10px;text-align:center;opacity:.85}
+.lb-close{position:absolute;top:calc(14px + env(safe-area-inset-top));right:16px;background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:999px;width:38px;height:38px;font-size:18px;cursor:pointer;z-index:2}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);color:#fff;border:none;border-radius:999px;width:44px;height:44px;font-size:24px;cursor:pointer}
+.lb-prev{left:10px}.lb-next{right:10px}
 .prevnext{display:flex;gap:10px;margin-top:14px}
 .prevnext button{flex:1;padding:12px;border-radius:10px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font-weight:700;font-size:14px;cursor:pointer}
 .prevnext button:disabled{opacity:.35}
@@ -149,6 +162,7 @@ a{color:var(--blue)}
 </div>
 
 <div id="detail"></div>
+<div id="lightbox"></div>
 
 <nav class="tabs">
   <button data-v="days" class="on"><span class="ic">📅</span>Dni</button>
@@ -284,29 +298,27 @@ sleep:"Bergen bobilparkering (2. noc)",wild:0,
 tips:["Do centra MHD — s obytkou v Bergene nezaparkuješ","Bergen = 240 daždivých dní v roku, pršiplášte!"],
 nav:[{t:"Bryggen",u:gs("Bryggen Bergen")}]},
 
-{n:15,iso:"2026-07-17",d:"pi 17.7.",st:3,title:"Stegastein → najdlhší tunel sveta → Borgund",drive:"190 km · 4 h",img:IMG.stegastein,
-plan:["E16 z Bergenu, zastávka vodopád Tvindefossen","Stegastein — vyhliadka 650 m nad Aurlandsfjordom","Lærdalský tunel 24,5 km — najdlhší cestný tunel sveta (modré jaskyne)","Borgund stavkirke (1180) — najzachovalejší drevený kostolík Nórska"],
-sleep:"Lærdal — bobilplass pri fjorde alebo divoko",altc:"Lærdal Ferie- og Fritidspark — priamo v Lærdalsøyri, 0–5 min",wild:1,
-photos:[IMG.borgund],
-nav:[{t:"Stegastein",u:gs("Stegastein viewpoint")},{t:"Borgund stavkirke",u:gs("Borgund Stave Church")}]},
+{n:15,iso:"2026-07-17",d:"pi 17.7.",st:3,title:"Mannheller → Jostedal Camping (check-in, 3 noci)",drive:"~65 km · 1 h",img:IMG.urnes,
+plan:["Stegastein, Aurland, Lærdalský tunel aj Borgund už hotové (spojené s Bergenom 16.7.) — dnes len presun a oddych","Trajekt/most cez Sogndal → Gaupne → Gjerde (~1 h)","Check-in Jostedal Camping — REZERVOVANÉ NA 3 NOCI (17.–20.7., elektrina)","Zvyšok dňa: rieka pri kempe, oddych, nákup v Joker (300 m), večera v hotelovej kaviarni ak sa nechce variť"],
+book:"🎫 Jostedal Camping — 3 noci potvrdené (post@jostedalcamping.no / +47 977 56 789)",
+sleep:"⛺ Jostedal Camping, Gjerde — 1. z 3 nocí",wild:0,
+nav:[{t:"Jostedal Camping",u:gs("Jostedal Camping Gjerde")}]},
 
-{n:16,iso:"2026-07-18",d:"so 18.7.",st:3,title:"Sognefjord → Jostedalen, kanoe",drive:"80 km + ⛴ 15 min",img:IMG.urnes,
-plan:["Trajekt Mannheller–Fodnes (15 min, bez rezervácie — ferjekonto zľava)","Solvorn → trajektík (bez auta) do Urnes — najstarší stave church, UNESCO","Cestou hore dolinou: Breheimsenteret (centrum ľadovca)","Popoludní kanoe/kajak, kúpanie","Večer voliteľne: akvapark v Gaupne — tobogán a SAUNY 🧖"],
-sleep:"Divoko v doline Jostedalen popri rieke (P4N), 2 noci — prespite čo najvyššie, ráno ste pri ľadovci za 10 min",altc:"Jostedal Camping pri Breheimsenteret — 5–10 min od spotov, 10 min od ľadovca. PRI ZLOM POČASÍ CHOĎTE SEM — zajtra máte vodcu o 12:30, elektrina + sušiareň",wild:1,
-nav:[{t:"Solvorn (trajektík Urnes)",u:gs("Solvorn ferry Urnes")},{t:"→ Jostedalen",u:"https://www.google.com/maps/dir/Gaupne/Breheimsenteret"}]},
+{n:16,iso:"2026-07-18",d:"so 18.7.",st:3,title:"Jostedalen — plný oddychový deň",drive:"0–70 km podľa chuti",img:IMG.nigardsbreen,
+plan:["Voľné ráno pri kempe — rieka, oddych, príprava výstroja na zajtrajšiu túru","LUSTRABADET Gaupne (~30 min): 25m bazén, tobogán 65 m, sauny, detský bazén — super aj pri horšom počasí (leto po–pi 10–18, so–ne 10–17)","Breheimsenteret — výstava o ľadovci (5 min od kempu)","Voliteľné: Solvorn → trajektík (bez auta) na Urnes — najstarší stavkirke sveta, UNESCO (len ak nemáte dosť kostolíkov 😄)","Večer skoro spať — zajtra túra"],
+sleep:"⛺ Jostedal Camping — 2. noc",wild:0,
+nav:[{t:"Lustrabadet Gaupne",u:gs("Lustrabadet Gaupne")},{t:"Breheimsenteret",u:gs("Breheimsenteret")},{t:"Solvorn (trajektík Urnes)",u:gs("Solvorn ferry Urnes")}]},
 
-{n:17,iso:"2026-07-19",d:"ne 19.7.",st:3,title:"🧊 NIGARDSBREEN — modrý ľad",drive:"40 km",img:IMG.nigardsbreen,
-plan:["Pohodové ráno, prechádzka k ľadovcovému jazeru","12:00 zraz: parkovisko Nigardsbreen, sklad výstroja so značkou GUIDE (pri toaletách)","12:30–17:00 Blue Ice Hike — loďka cez jazero v cene, mačky, lano, 1,5 h na ľade","OBLEČENIE: celé telo zakryté (žiadne kraťasy!), vetrovka, rukavice, okuliare, desiata, pevná obuv","Večer kúpanie/gril — svetlo do polnoci"],
+{n:17,iso:"2026-07-19",d:"ne 19.7.",st:3,title:"🧊 NIGARDSBREEN — modrý ľad",drive:"6 km / ~10 min",img:IMG.nigardsbreen,
+plan:["Pohodové ráno v kempe, ~11:30 odchod (6 km / 10 min na parkovisko)","12:00 zraz: parkovisko Nigardsbreen, sklad výstroja so značkou GUIDE (pri toaletách)","12:30–17:00 Blue Ice Hike — loďka cez jazero v cene, mačky, lano, 1,5 h na ľade","OBLEČENIE: celé telo zakryté (žiadne kraťasy!), vetrovka, rukavice, okuliare, desiata, pevná obuv","Večer v kempe: sprcha, PRANIE mokrých/špinavých vecí z ľadovca, poriadna večera, skoro spať"],
 book:"🎫 bfl.no 354849621 · zraz 12:00 pri depe GUIDE · +47 57 68 31 11",
-sleep:"Jostedalen divoko (2. noc)",altc:"Jostedal Camping — 5–10 min (sušiareň na mokré veci z ľadovca)",wild:1,
+sleep:"⛺ Jostedal Camping — 3. noc (po túre pranie a sprcha)",wild:0,
 nav:[{t:"Parkovisko Nigardsbreen",u:gs("Nigardsbreen parking")}]},
 
 {n:18,iso:"2026-07-20",d:"po 20.7.",st:3,title:"🏔 Sognefjellsvegen — najvyššia cesta severu",drive:"130 km · 3 h",img:IMG.sognefjellet,
-plan:["Rv55 cez sedlo 1 434 m: štíty Hurrungane, sneh aj v júli, tyrkysové jazerá","Zastávka rasteplass Mefjellet (kamenná skulptúra)","Zjazd Bøverdalen → Lom: stavkirke + pekáreň Bakeriet i Lom (škoricovky!)","Nákup + voda v Lome","Večer vytiahnuť mýtnou cestou na Juvasshytta (1 850 m)"],
+plan:["Ráno checkout z Jostedal Campingu (odpočinutí, vyprané) → Gaupne → Skjolden","Rv55 Sognefjellsvegen cez sedlo 1 434 m: štíty Hurrungane, sneh aj v júli, tyrkysové jazerá","Zastávka rasteplass Mefjellet (kamenná skulptúra)","Zjazd Bøverdalen → Lom: stavkirke + pekáreň Bakeriet i Lom (škoricovky!)","Nákup + voda v Lome","Večer vytiahnuť mýtnou cestou na Juvasshytta (1 850 m)"],
 sleep:"Parkovisko Juvasshytta (1 850 m) — najvyšší nocľah dovolenky, zajtra štart túry o 2 min od dverí",altc:"pri zlom počasí hore: kemp v Bøverdalen (~25 min) alebo Nordal Turistsenter Lom (~40 min) — ráno mýtnou cestou späť hore, zraz s vodcom 9:30 stíhate pri odchode do 8:30",wild:1,
-nav:[{t:"Bakeriet i Lom",u:gs("Bakeriet i Lom")},{t:"Juvasshytta",u:gs("Juvasshytta")}]},
-
-{n:19,iso:"2026-07-21",d:"ut 21.7.",st:3,title:"⛰ GALDHØPIGGEN 2 469 m — strecha Škandinávie",drive:"60 km",img:IMG.galdhopiggen,
+nav:[{t:"Bakeriet i Lom",u:gs("Bakeriet i Lom")},{t:"Juvasshytta",u:gs("Juvasshytta")}]},{n:19,iso:"2026-07-21",d:"ut 21.7.",st:3,title:"⛰ GALDHØPIGGEN 2 469 m — strecha Škandinávie",drive:"60 km",img:IMG.galdhopiggen,
 plan:["9:30 zraz pri Juvasshytte (ste na mieste)","10:00 štart: s vodcom v lane cez ľadovec Styggebreen — ~6 h, 620 m prevýšenia","Z vrcholu vidno štvrtinu Nórska","~16:00 dole, zjazd do Bøverdalen, kakao/pivo"],
 book:"🎫 Juvasshytta DL54KO61BC · zraz 9:30 · nerefundovateľné · +47 61 21 15 50",
 sleep:"Bøverdalen divoko pri rieke",altc:"Nordal Turistsenter Lom — ~15 min (kemp + chatky + reštaurácia)",wild:1,
@@ -473,13 +485,11 @@ const WP=[
 {d:"st 15.7.",iso:"2026-07-15",nm:"Voss — rafting",alt:60,t:"🛶",la:60.65,lo:6.49,nx:20,nn:11,ni:"🌦️",yr:"Voss"},
 {d:"st 15.7.",iso:"2026-07-15",nm:"Bergen (nocľah)",alt:10,t:"🌙",la:60.39,lo:5.32,nx:18,nn:12,ni:"🌧️",yr:"Bergen"},
 {d:"št 16.7.",iso:"2026-07-16",nm:"Bergen — mesto, Fløyen",alt:320,t:"🏘",la:60.39,lo:5.32,nx:18,nn:12,ni:"🌧️",yr:"Bergen"},
-{d:"pi 17.7.",iso:"2026-07-17",nm:"Stegastein (vyhliadka)",alt:650,t:"🚗",la:60.91,lo:7.20,nx:16,nn:8,ni:"🌦️",yr:"Aurland"},
-{d:"pi 17.7.",iso:"2026-07-17",nm:"Borgund (stavkirke)",alt:300,t:"⛪",la:61.05,lo:7.81,nx:19,nn:10,ni:"🌦️",yr:"Borgund"},
-{d:"pi 17.7.",iso:"2026-07-17",nm:"Lærdal (nocľah)",alt:10,t:"🌙",la:61.10,lo:7.48,nx:21,nn:11,ni:"🌤️",yr:"Lærdal"},
-{d:"so 18.7.",iso:"2026-07-18",nm:"Urnes / Solvorn (stavkirke)",alt:10,t:"⛪",la:61.29,lo:7.32,nx:20,nn:11,ni:"🌤️",yr:"Solvorn"},
-{d:"so 18.7.",iso:"2026-07-18",nm:"Jostedalen (nocľah)",alt:300,t:"🌙",la:61.57,lo:7.27,nx:19,nn:10,ni:"🌦️",yr:"Jostedal"},
+{d:"pi 17.7.",iso:"2026-07-17",nm:"Jostedal Camping, Gjerde (nocľah 1/3)",alt:300,t:"🌙",la:61.53,lo:7.32,nx:19,nn:10,ni:"🌦️",yr:"Jostedal"},
+{d:"so 18.7.",iso:"2026-07-18",nm:"Lustrabadet Gaupne",alt:50,t:"🏊",la:61.42,lo:7.19,nx:20,nn:11,ni:"🌤️",yr:"Gaupne"},
+{d:"so 18.7.",iso:"2026-07-18",nm:"Jostedal Camping (nocľah 2/3)",alt:300,t:"🌙",la:61.53,lo:7.32,nx:19,nn:10,ni:"🌦️",yr:"Jostedal"},
 {d:"ne 19.7.",iso:"2026-07-19",nm:"NIGARDSBREEN — ľadovec",alt:300,t:"🧊",la:61.68,lo:7.22,nx:18,nn:9,ni:"🌦️",yr:"Nigardsbreen"},
-{d:"ne 19.7.",iso:"2026-07-19",nm:"Jostedalen (nocľah)",alt:300,t:"🌙",la:61.57,lo:7.27,nx:19,nn:10,ni:"🌦️",yr:"Jostedal"},
+{d:"ne 19.7.",iso:"2026-07-19",nm:"Jostedal Camping (nocľah 3/3)",alt:300,t:"🌙",la:61.53,lo:7.32,nx:19,nn:10,ni:"🌦️",yr:"Jostedal"},
 {d:"po 20.7.",iso:"2026-07-20",nm:"Sognefjellet — najvyššia cesta",alt:1430,t:"🏔",la:61.57,lo:7.95,nx:11,nn:3,ni:"🌦️",yr:"Sognefjellet"},
 {d:"po 20.7.",iso:"2026-07-20",nm:"Lom (stavkirke, pekáreň)",alt:380,t:"🚗",la:61.84,lo:8.57,nx:21,nn:10,ni:"🌤️",yr:"Lom"},
 {d:"po 20.7.",iso:"2026-07-20",nm:"Juvasshytta 1850 m (nocľah)",alt:1850,t:"🌙",la:61.66,lo:8.36,nx:8,nn:1,ni:"🌨️",yr:"Juvasshytta"},
@@ -523,6 +533,12 @@ function wxStr(i){
   return ` · <span style="color:var(--muted)">${n[2]} ~${n[0]}°/${n[1]}° <span style="font-size:10px">ø júl</span></span>`;
 }
 
+let GALLERY={};
+function loadGallery(){
+  fetch('fotky/manifest.json?_='+Date.now()).then(r=>r.ok?r.json():{}).then(m=>{
+    GALLERY=m||{}; renderDays(); if(cur>=0)openDay(cur);
+  }).catch(()=>{});
+}
 function loadWeather(){
   const lats=COORDS.map(c=>c[0]).join(","), lons=COORDS.map(c=>c[1]).join(",");
   const url=`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=auto&forecast_days=16`;
@@ -548,7 +564,7 @@ function loadWeather(){
   }).catch(()=>{});
 }
 
-const STATUS=`<div style="background:#fdf1e3;border:1.5px solid var(--amber);border-radius:12px;padding:9px 13px;margin:0 0 10px;font-size:13px"><b>⚡ Stav (11. 7.):</b> deň pred plánom — Kjerag ✅ aj Preikestolen ✅ hotové. Finálny plán: dnes oddych + Sand (nákup na nedeľu!), ne Bondhusvatnet → kemp Kinsarvik (pranie), po Husedalen + Vøringsfossen večer, ut Voss s gondolou.</div>`;
+const STATUS=`<div style="background:#fdf1e3;border:1.5px solid var(--amber);border-radius:12px;padding:9px 13px;margin:0 0 10px;font-size:13px"><b>⚡ Stav (16. 7.):</b> Bergen aj Stegastein/Aurland/Borgund hotové v jeden deň — deň k dobru! Jostedal Camping rezervovaný na 3 noci (17.–19.7.): pi príchod, so oddych (Lustrabadet), ne túra na ľadovci 12:30. Po 20.7. fresh na Sognefjellsvegen → Juvasshytta.</div>`;
 function todayIdx(){
   const t=new Date(); const y=t.getFullYear(),m=String(t.getMonth()+1).padStart(2,"0"),d=String(t.getDate()).padStart(2,"0");
   const iso=`${y}-${m}-${d}`;
@@ -579,7 +595,7 @@ function renderDays(){
       <div class="thumb" style="background-image:url('${d.img||""}')"></div>
       <div class="tx"><div class="dt">${d.d} · DEŇ ${d.n}${i===ti?' · <span style="color:var(--red)">DNES</span>':''}</div>
       <h4>${d.title}</h4>
-      <div class="meta">🚐 ${d.drive}${d.book?' · <b>🎫</b>':''}${d.wild?' · 🌙 divoko':' · ⛺'}<span style="color:var(--blue);font-weight:700">${wxStr(i)}</span></div></div></div>`;
+      <div class="meta">🚐 ${d.drive}${d.book?' · <b>🎫</b>':''}${d.wild?' · 🌙 divoko':' · ⛺'}${GALLERY[d.n]?' · 📷 '+GALLERY[d.n].length:''}<span style="color:var(--blue);font-weight:700">${wxStr(i)}</span></div></div></div>`;
   });
   let wn=`<div class="lead" style="margin:2px 2px 10px">⛅ Počasie: <b>0–7 dní</b> spoľahlivá predpoveď · <b>8–16 dní</b> trend (~) · <b>ďalej</b> júlový priemer (ø, sivo, orientačne). Živé z Open-Meteo, aktualizuje sa online.${wxTime?' Naposledy: '+new Date(wxTime).toLocaleString("sk-SK",{day:"numeric",month:"numeric",hour:"2-digit",minute:"2-digit"}):''}</div>`;
   document.getElementById("v-days").innerHTML=STATUS+wn+h;
@@ -608,6 +624,18 @@ function openDay(i){
   h+=`<div class="sec"><h5>Program — ťukni a odškrtni</h5><ul class="plan">`;
   d.plan.forEach((p,j)=>{h+=`<li class="${dd[j]?"done":""}" onclick="tog(${d.n},${j},this)">${p}</li>`;});
   h+=`</ul></div>`;
+  const gph=GALLERY[d.n];
+  if(gph&&gph.length){
+    h+=`<div class="sec"><h5>📷 Naše fotky (${gph.length})</h5><div class="mygallery">`;
+    gph.forEach((p,gi)=>{
+      if(p.type==='video'){
+        h+=`<div class="mgitem mgvideo" onclick="openLightbox(${d.n},${gi})"><video src="fotky/${p.full}" muted playsinline preload="metadata"></video><span class="playic">▶</span></div>`;
+      }else{
+        h+=`<div class="mgitem" onclick="openLightbox(${d.n},${gi})"><img src="fotky/${p.thumb}" loading="lazy"></div>`;
+      }
+    });
+    h+=`</div></div>`;
+  }
   h+=`<div class="box sleep">🛌 <b>Nocľah:</b> ${d.sleep}</div>`;
   if(d.altc) h+=`<div class="box tip">⛺ <b>Záložný kemp:</b> ${d.altc}</div>`;
   if(d.late) h+=`<div class="box late">⏱ <b>Ak meškáte:</b> ${d.late}</div>`;
@@ -820,6 +848,27 @@ function renderInfo(){
 }
 function togPack(i,el){pack[i]=!pack[i];SAVE("pack",pack);el.classList.toggle("done");}
 
+/* ============ LIGHTBOX (moje fotky) ============ */
+let lbDay=-1, lbIdx=-1;
+function openLightbox(n,idx){lbDay=n;lbIdx=idx;renderLightbox();}
+function closeLightbox(){document.getElementById("lightbox").classList.remove("open");document.getElementById("lightbox").innerHTML="";}
+function lbNav(delta){
+  const items=GALLERY[lbDay]||[]; lbIdx=(lbIdx+delta+items.length)%items.length; renderLightbox();
+}
+function renderLightbox(){
+  const items=GALLERY[lbDay]||[]; const p=items[lbIdx]; if(!p)return;
+  const el=document.getElementById("lightbox");
+  const media = p.type==='video'
+    ? `<video src="fotky/${p.full}" controls autoplay playsinline></video>`
+    : `<img src="fotky/${p.full}">`;
+  el.innerHTML=`
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    ${items.length>1?'<button class="lb-nav lb-prev" onclick="lbNav(-1)">‹</button>':''}
+    <div class="lb-media">${media}${p.caption||p.time?`<div class="lb-cap">${p.caption?p.caption+' · ':''}${p.time||''}</div>`:''}</div>
+    ${items.length>1?'<button class="lb-nav lb-next" onclick="lbNav(1)">›</button>':''}
+  `;
+  el.classList.add("open");
+}
 /* ============ NAV ============ */
 document.querySelectorAll("nav.tabs button").forEach(b=>{
   b.addEventListener("click",()=>{
@@ -831,7 +880,7 @@ document.querySelectorAll("nav.tabs button").forEach(b=>{
   });
 });
 
-renderDays();renderWp();renderMap();renderTix();renderPlanB();renderInfo();loadWeather();
+renderDays();renderWp();renderMap();renderTix();renderPlanB();renderInfo();loadWeather();loadGallery();
 const ti=todayIdx(); if(ti>=0) setTimeout(()=>openDay(ti),400);
 
 /* offline */
