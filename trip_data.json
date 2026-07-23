@@ -1,0 +1,511 @@
+{
+ "days": [
+  {
+   "n": 1,
+   "iso": "2026-07-03",
+   "title": "Prevzatie karavanu, nočný odjazd"
+  },
+  {
+   "n": 2,
+   "iso": "2026-07-04",
+   "title": "Nemecko → Billund"
+  },
+  {
+   "n": 3,
+   "iso": "2026-07-05",
+   "title": "🎢 LEGOLAND — celý deň"
+  },
+  {
+   "n": 4,
+   "iso": "2026-07-06",
+   "title": "🚴 Duny a pláže západného Dánska"
+  },
+  {
+   "n": 5,
+   "iso": "2026-07-07",
+   "title": "Skagen — stret dvoch morí → ⛴ trajekt do Nórska"
+  },
+  {
+   "n": 6,
+   "iso": "2026-07-08",
+   "title": "Cez hory do Lysebotn"
+  },
+  {
+   "n": 7,
+   "iso": "2026-07-09",
+   "title": "🥾 KJERAG — balvan 1 000 m nad fjordom"
+  },
+  {
+   "n": 8,
+   "iso": "2026-07-10",
+   "title": "⛴ Lysefjord → PREIKESTOLEN večer"
+  },
+  {
+   "n": 9,
+   "iso": "2026-07-11",
+   "title": "Oddych pri Suldalsvatnet + Sand"
+  },
+  {
+   "n": 10,
+   "iso": "2026-07-12",
+   "title": "Låtefossen → Bondhusvatnet → Kinsarvik"
+  },
+  {
+   "n": 11,
+   "iso": "2026-07-13",
+   "title": "🥾 Husedalen → Vøringsfossen večer"
+  },
+  {
+   "n": 12,
+   "iso": "2026-07-14",
+   "title": "Eidfjord → Voss (gondola večer)"
+  },
+  {
+   "n": 13,
+   "iso": "2026-07-15",
+   "title": "🛶 Rafting na Vosso → Bergen"
+  },
+  {
+   "n": 14,
+   "iso": "2026-07-16",
+   "title": "🏘 BERGEN — celý deň bez šoférovania"
+  },
+  {
+   "n": 15,
+   "iso": "2026-07-17",
+   "title": "Mannheller → Jostedal Camping (check-in, 3 noci)"
+  },
+  {
+   "n": 16,
+   "iso": "2026-07-18",
+   "title": "Jostedalen — plný oddychový deň"
+  },
+  {
+   "n": 17,
+   "iso": "2026-07-19",
+   "title": "🧊 NIGARDSBREEN — modrý ľad"
+  },
+  {
+   "n": 18,
+   "iso": "2026-07-20",
+   "title": "🏔 Sognefjellsvegen — najvyššia cesta severu"
+  },
+  {
+   "n": 19,
+   "iso": "2026-07-21",
+   "title": "⛰ GALDHØPIGGEN 2 469 m — strecha Škandinávie"
+  },
+  {
+   "n": 20,
+   "iso": "2026-07-22",
+   "title": "🌊 Dalsnibba → GEIRANGER + tichá plavba"
+  },
+  {
+   "n": 21,
+   "iso": "2026-07-23",
+   "title": "🛣 TROLLSTIGEN — cesta trolov"
+  },
+  {
+   "n": 22,
+   "iso": "2026-07-24",
+   "title": "BONUSOVÝ DEŇ — Ålesund + maják Alnes (Godøya)"
+  },
+  {
+   "n": 23,
+   "iso": "2026-07-25",
+   "title": "🌉 ATLANTERHAVSVEIEN — Atlantická cesta"
+  },
+  {
+   "n": 24,
+   "iso": "2026-07-26",
+   "title": "Kristiansund → INNERDALEN (najkrajšie údolie Nórska)"
+  },
+  {
+   "n": 25,
+   "iso": "2026-07-27",
+   "title": "⚡ ROZHODNUTIE: Trondheim (2 h) alebo rovno Dovrefjell"
+  },
+  {
+   "n": 26,
+   "iso": "2026-07-28",
+   "title": "Dovrefjell → Lillehammer (bob) → Oslo, Bogstad Camping"
+  },
+  {
+   "n": 27,
+   "iso": "2026-07-29",
+   "title": "Oslo → ⛴ Ystad, nočný trajekt"
+  },
+  {
+   "n": 28,
+   "iso": "2026-07-30",
+   "title": "Świnoujście → Krakov (posledná noc v karavane)"
+  },
+  {
+   "n": 29,
+   "iso": "2026-07-31",
+   "title": "Krakov → Bardejov: odovzdanie → domov autom"
+  }
+ ],
+ "waypoints": [
+  {
+   "iso": "2026-07-03",
+   "nm": "Košice — štart",
+   "la": 48.72,
+   "lo": 21.26
+  },
+  {
+   "iso": "2026-07-03",
+   "nm": "Nemecko, diaľnica (nocľah)",
+   "la": 52.52,
+   "lo": 13.4
+  },
+  {
+   "iso": "2026-07-04",
+   "nm": "Billund (nocľah pri Legolande)",
+   "la": 55.73,
+   "lo": 9.13
+  },
+  {
+   "iso": "2026-07-05",
+   "nm": "Legoland Billund",
+   "la": 55.73,
+   "lo": 9.13
+  },
+  {
+   "iso": "2026-07-05",
+   "nm": "Duny Søndervig (nocľah)",
+   "la": 56.13,
+   "lo": 8.13
+  },
+  {
+   "iso": "2026-07-06",
+   "nm": "Hvide Sande (bicykle, pláž)",
+   "la": 56.0,
+   "lo": 8.13
+  },
+  {
+   "iso": "2026-07-06",
+   "nm": "Klitmøller / Thy (nocľah)",
+   "la": 57.02,
+   "lo": 8.48
+  },
+  {
+   "iso": "2026-07-07",
+   "nm": "Skagen — Grenen (stret morí)",
+   "la": 57.74,
+   "lo": 10.64
+  },
+  {
+   "iso": "2026-07-07",
+   "nm": "Hirtshals → trajekt",
+   "la": 57.59,
+   "lo": 9.96
+  },
+  {
+   "iso": "2026-07-07",
+   "nm": "Pri Kristiansande (nocľah)",
+   "la": 58.1,
+   "lo": 7.8
+  },
+  {
+   "iso": "2026-07-08",
+   "nm": "Lysebotn (fjord)",
+   "la": 59.05,
+   "lo": 6.66
+  },
+  {
+   "iso": "2026-07-08",
+   "nm": "Øygardstøl — plató (nocľah)",
+   "la": 59.02,
+   "lo": 6.66
+  },
+  {
+   "iso": "2026-07-09",
+   "nm": "KJERAG — túra (balvan)",
+   "la": 59.03,
+   "lo": 6.59
+  },
+  {
+   "iso": "2026-07-09",
+   "nm": "Øygardstøl (nocľah)",
+   "la": 59.02,
+   "lo": 6.66
+  },
+  {
+   "iso": "2026-07-10",
+   "nm": "Plavba Lysefjordom ⛴ (vystúpiť Forsand)",
+   "la": 59.0,
+   "lo": 6.4
+  },
+  {
+   "iso": "2026-07-10",
+   "nm": "PREIKESTOLEN — večerná túra",
+   "la": 58.99,
+   "lo": 6.19
+  },
+  {
+   "iso": "2026-07-10",
+   "nm": "Suldalsvatnet (nocľah)",
+   "la": 59.57,
+   "lo": 6.9
+  },
+  {
+   "iso": "2026-07-11",
+   "nm": "Suldalsvatnet — oddych, SUP",
+   "la": 59.57,
+   "lo": 6.9
+  },
+  {
+   "iso": "2026-07-11",
+   "nm": "Sand — nákup!, Høse bru, lososy",
+   "la": 59.48,
+   "lo": 6.26
+  },
+  {
+   "iso": "2026-07-11",
+   "nm": "Suldalsvatnet (nocľah)",
+   "la": 59.57,
+   "lo": 6.9
+  },
+  {
+   "iso": "2026-07-12",
+   "nm": "Låtefossen + Odda",
+   "la": 59.95,
+   "lo": 6.58
+  },
+  {
+   "iso": "2026-07-12",
+   "nm": "Bondhusvatnet — prechádzka",
+   "la": 60.11,
+   "lo": 6.32
+  },
+  {
+   "iso": "2026-07-12",
+   "nm": "Kinsarvik KEMP — pranie (nocľah)",
+   "la": 60.38,
+   "lo": 6.72
+  },
+  {
+   "iso": "2026-07-13",
+   "nm": "Husedalen — po 2. vodopád",
+   "la": 60.39,
+   "lo": 6.78
+  },
+  {
+   "iso": "2026-07-13",
+   "nm": "Vøringsfossen — večer",
+   "la": 60.43,
+   "lo": 7.25
+  },
+  {
+   "iso": "2026-07-13",
+   "nm": "Eidfjord (nocľah)",
+   "la": 60.47,
+   "lo": 7.07
+  },
+  {
+   "iso": "2026-07-14",
+   "nm": "Skjervsfossen / Bordalsgjelet",
+   "la": 60.55,
+   "lo": 6.55
+  },
+  {
+   "iso": "2026-07-14",
+   "nm": "Voss — gondola večer (nocľah)",
+   "la": 60.63,
+   "lo": 6.42
+  },
+  {
+   "iso": "2026-07-15",
+   "nm": "Voss — rafting",
+   "la": 60.65,
+   "lo": 6.49
+  },
+  {
+   "iso": "2026-07-15",
+   "nm": "Bergen (nocľah)",
+   "la": 60.39,
+   "lo": 5.32
+  },
+  {
+   "iso": "2026-07-16",
+   "nm": "Bergen — mesto, Fløyen",
+   "la": 60.39,
+   "lo": 5.32
+  },
+  {
+   "iso": "2026-07-17",
+   "nm": "Jostedal Camping, Gjerde (nocľah 1/3)",
+   "la": 61.53,
+   "lo": 7.32
+  },
+  {
+   "iso": "2026-07-18",
+   "nm": "Lustrabadet Gaupne",
+   "la": 61.42,
+   "lo": 7.19
+  },
+  {
+   "iso": "2026-07-18",
+   "nm": "Jostedal Camping (nocľah 2/3)",
+   "la": 61.53,
+   "lo": 7.32
+  },
+  {
+   "iso": "2026-07-19",
+   "nm": "NIGARDSBREEN — ľadovec",
+   "la": 61.68,
+   "lo": 7.22
+  },
+  {
+   "iso": "2026-07-19",
+   "nm": "Jostedal Camping (nocľah 3/3)",
+   "la": 61.53,
+   "lo": 7.32
+  },
+  {
+   "iso": "2026-07-20",
+   "nm": "Sognefjellet — najvyššia cesta",
+   "la": 61.57,
+   "lo": 7.95
+  },
+  {
+   "iso": "2026-07-20",
+   "nm": "Lom (stavkirke, pekáreň)",
+   "la": 61.84,
+   "lo": 8.57
+  },
+  {
+   "iso": "2026-07-20",
+   "nm": "Juvasshytta 1850 m (nocľah)",
+   "la": 61.66,
+   "lo": 8.36
+  },
+  {
+   "iso": "2026-07-21",
+   "nm": "GALDHØPIGGEN — vrchol",
+   "la": 61.64,
+   "lo": 8.31
+  },
+  {
+   "iso": "2026-07-21",
+   "nm": "Bøverdalen (nocľah)",
+   "la": 61.75,
+   "lo": 8.35
+  },
+  {
+   "iso": "2026-07-22",
+   "nm": "Dalsnibba — Skywalk",
+   "la": 62.04,
+   "lo": 7.27
+  },
+  {
+   "iso": "2026-07-22",
+   "nm": "Geiranger — fjord cruise (nocľah)",
+   "la": 62.1,
+   "lo": 7.21
+  },
+  {
+   "iso": "2026-07-23",
+   "nm": "Trollstigen — cesta trolov",
+   "la": 62.46,
+   "lo": 7.66
+  },
+  {
+   "iso": "2026-07-23",
+   "nm": "Trollveggen / Åndalsnes (nocľah)",
+   "la": 62.55,
+   "lo": 7.69
+  },
+  {
+   "iso": "2026-07-24",
+   "nm": "Maják Alnes, Godøy",
+   "la": 62.57,
+   "lo": 5.97
+  },
+  {
+   "iso": "2026-07-24",
+   "nm": "Ålesund (nocľah)",
+   "la": 62.47,
+   "lo": 6.15
+  },
+  {
+   "iso": "2026-07-25",
+   "nm": "Atlantic Road / Averøy (nocľah)",
+   "la": 63.01,
+   "lo": 7.35
+  },
+  {
+   "iso": "2026-07-26",
+   "nm": "Kristiansund centrum",
+   "la": 63.11,
+   "lo": 7.73
+  },
+  {
+   "iso": "2026-07-26",
+   "nm": "INNERDALEN — najkrajšie údolie",
+   "la": 62.68,
+   "lo": 8.75
+  },
+  {
+   "iso": "2026-07-26",
+   "nm": "Sunndalsøra (nocľah)",
+   "la": 62.67,
+   "lo": 8.56
+  },
+  {
+   "iso": "2026-07-27",
+   "nm": "Trondheim — Nidaros (variant A)",
+   "la": 63.43,
+   "lo": 10.39
+  },
+  {
+   "iso": "2026-07-27",
+   "nm": "Dovrefjell — Snøhetta (nocľah)",
+   "la": 62.3,
+   "lo": 9.55
+  },
+  {
+   "iso": "2026-07-28",
+   "nm": "Lillehammer — bob (zastávka)",
+   "la": 61.12,
+   "lo": 10.46
+  },
+  {
+   "iso": "2026-07-28",
+   "nm": "Bogstad Camping, Oslo (nocľah)",
+   "la": 59.96,
+   "lo": 10.63
+  },
+  {
+   "iso": "2026-07-29",
+   "nm": "Fram Museum (Bygdøy)",
+   "la": 59.9,
+   "lo": 10.69
+  },
+  {
+   "iso": "2026-07-29",
+   "nm": "Ystad → nočný trajekt",
+   "la": 55.43,
+   "lo": 13.82
+  },
+  {
+   "iso": "2026-07-30",
+   "nm": "Vroclav (obed)",
+   "la": 51.11,
+   "lo": 17.03
+  },
+  {
+   "iso": "2026-07-30",
+   "nm": "Krakov (posledná noc v karavane)",
+   "la": 50.06,
+   "lo": 19.94
+  },
+  {
+   "iso": "2026-07-31",
+   "nm": "Bardejov — odovzdanie → domov",
+   "la": 49.29,
+   "lo": 21.27
+  }
+ ]
+}
